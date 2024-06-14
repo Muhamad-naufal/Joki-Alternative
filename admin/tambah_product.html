@@ -10,9 +10,9 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>GSI Admin - Product</title>
+    <title>GSI Admin - Tambah Product</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link
       href="vendor/fontawesome-free/css/all.min.css"
       rel="stylesheet"
@@ -23,14 +23,8 @@
       rel="stylesheet"
     />
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
-
-    <!-- Custom styles for this page -->
-    <link
-      href="vendor/datatables/dataTables.bootstrap4.min.css"
-      rel="stylesheet"
-    />
   </head>
 
   <body id="page-top">
@@ -110,14 +104,12 @@
             class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
           >
             <!-- Sidebar Toggle (Topbar) -->
-            <form class="form-inline">
-              <button
-                id="sidebarToggleTop"
-                class="btn btn-link d-md-none rounded-circle mr-3"
-              >
-                <i class="fa fa-bars"></i>
-              </button>
-            </form>
+            <button
+              id="sidebarToggleTop"
+              class="btn btn-link d-md-none rounded-circle mr-3"
+            >
+              <i class="fa fa-bars"></i>
+            </button>
 
             <!-- Topbar Search -->
             <form
@@ -373,6 +365,14 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
+                  <a class="dropdown-item" href="#">
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Settings
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Activity Log
+                  </a>
                   <div class="dropdown-divider"></div>
                   <a
                     class="dropdown-item"
@@ -394,116 +394,71 @@
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
-            <h1 class="h3 mb-2 text-gray-800">Product</h1>
+            <h1 class="h3 mb-1 text-gray-800">Tambah Product</h1>
 
-            <a
-              href="tambah_product.html"
-              class="btn btn-success btn-icon-split"
-            >
-              <span class="icon text-white-50">
-                <i class="fa-solid fa-plus"></i>
-              </span>
-              <span class="text">Tambah Product</span>
-            </a>
-            <br /><br />
-            <!-- DataTales Example -->
-            <div class="card shadow mb-4">
-              <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Data Product</h6>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-bordered"
-                    id="dataTable"
-                    width="100%"
-                    cellspacing="0"
-                  >
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama Produk</th>
-                        <th>Gambar</th>
-                        <th>Keterangan</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama Produk</th>
-                        <th>Gambar</th>
-                        <th>Keterangan</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Produk 1</td>
-                        <td>
-                          <img
-                            src="img/undraw_profile.svg"
-                            alt="gambar"
-                            width="100px"
-                            height="100px"
-                          />
-                        </td>
-                        <td>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Quisquam, voluptas.
-                        </td>
-                        <td>
-                          <a href="#" class="btn btn-warning btn-circle">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                          </a>
-                          <a href="#" class="btn btn-danger btn-circle">
-                            <i class="fas fa-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Produk 2</td>
-                        <td>
-                          <img
-                            src="img/undraw_profile.svg"
-                            alt="gambar"
-                            width="100px"
-                            height="100px"
-                          />
-                        </td>
-                        <td>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Quisquam, voluptas.
-                        </td>
-                        <td>
-                          <a href="#" class="btn btn-primary">Edit</a>
-                          <a href="#" class="btn btn-danger">Hapus</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Produk 3</td>
-                        <td>
-                          <img
-                            src="img/undraw_profile.svg"
-                            alt="gambar"
-                            width="100px"
-                            height="100px"
-                          />
-                        </td>
-                        <td>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Quisquam, voluptas.
-                        </td>
-                        <td>
-                          <a href="#" class="btn btn-primary">Edit</a>
-                          <a href="#" class="btn btn-danger">Hapus</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <!-- Content Row -->
+            <div class="row">
+              <!-- Fade In Utility -->
+              <div class="col-lg-6">
+                <div class="card position-relative">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Form Tambah Product
+                    </h6>
+                  </div>
+                  <div class="card-body">
+                    <input
+                      class="form-control"
+                      list="datalistOptions"
+                      id="exampleDataList"
+                      placeholder="Nama Product"
+                    />
+                    <div class="mb-3">
+                      <label for="formFile" class="form-label"></label>
+                      <input class="form-control" type="file" id="formFile" />
+                    </div>
+                    <div class="mb-3">
+                      <label
+                        for="exampleFormControlTextarea1"
+                        class="form-label"
+                      ></label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                      >
+                        Keterangan Product</textarea
+                      >
+                    </div>
+                    <br />
+                    <div class="dropdown mb-4">
+                      <button
+                        class="btn btn-primary dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        Dropdown
+                      </button>
+                      <div
+                        class="dropdown-menu animated--fade-in"
+                        aria-labelledby="dropdownMenuButton"
+                      >
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#"
+                          >Something else here</a
+                        >
+                      </div>
+                    </div>
+                    <p class="mb-0 small">
+                      Note: This utility animates the CSS opacity property,
+                      meaning it will override any existing opacity on an
+                      element being animated!
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -516,7 +471,7 @@
         <footer class="sticky-footer bg-white">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright &copy; General Steel Indonesia 2024</span>
+              <span>Copyright &copy; Your Website 2020</span>
             </div>
           </div>
         </footer>
@@ -579,16 +534,5 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-    <script
-      src="https://kit.fontawesome.com/6beb2a82fc.js"
-      crossorigin="anonymous"
-    ></script>
   </body>
 </html>
