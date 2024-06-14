@@ -158,21 +158,8 @@ if (!isset($_SESSION['username'])) {
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row">
-                        <form action="edit_admin.php" method="post" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <div class="file-input-container">
-                                    <i class="fas fa-upload"></i>
-                                    <input type="file" id="game-image" name="game-image">
-                                    <img class="img-fluid" src="<?php echo $data['img'] ?>" id="game-image-preview" alt="Preview Gambar">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="file-input-container">
-                                    <img class="img-fluid" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
-                                </div>
-                            </div>
-                        </form>
+                    <div class="file-input-container">
+                        <img class="img-fluid" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
                     </div>
                 </div>
                 <!-- /.container-fluid -->
