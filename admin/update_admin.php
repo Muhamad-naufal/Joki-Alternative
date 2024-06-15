@@ -1,12 +1,18 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['username'])) {
-  header("location:login.php");
-} else {
-  $username = $_SESSION['username'];
+  header("Location: login.php");
+  exit();
 }
 
+include 'config.php';
+$username = $_SESSION['username'];
+$sql = mysqli_query($Connection, "SELECT * FROM `admin` where `username` = '$username'");
+$data = mysqli_fetch_array($sql);
+$gambar = $data['gambar'];
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -159,22 +165,22 @@ if (!isset($_SESSION['username'])) {
           <div class="card position-relative">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">
-                Form Tambah Product
+                Form Edit Product
               </h6>
             </div>
             <div class="card-body">
-              <form action="proccess/add_produk.php" method="post" enctype="multipart/form-data">
+              <form action="proccess/edit_admin.php" method="post" enctype="multipart/form-data">
                 <div class="file-input-container mb-2">
                   <input type="file" id="game-image" name="game-image">
-                  <img class="img-fluid" id="game-image-preview" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
+                  <img class="img-fluid" id="game-image-preview" src="proccess/<?php echo $gambar ?>" alt="Preview Gambar">
                 </div>
                 <div class="mb-3">
-                  <label for="game-title" class="form-label">Nama Produk</label>
-                  <input type="text" class="form-control" id="nama_prod" name="nama_prod" required>
+                  <label for="game-title" class="form-label">Username</label>
+                  <input type="text" class="form-control" id="username" name="username" value="<?php echo $username?>" required>
                 </div>
                 <div class="mb-3">
-                  <label for="product-description" class="form-label">Deskripsi Product</label>
-                  <textarea class="form-control" id="ket" name="ket" rows="3" required></textarea>
+                  <label for="game-title" class="form-label">Password</label>
+                  <input type="pssword" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Masukkan</button>
               </form>

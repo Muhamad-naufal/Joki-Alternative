@@ -2,9 +2,12 @@
 session_start();
 if (!isset($_SESSION['username'])) {
     header("location:login.php");
-} else {
-    $username = $_SESSION['username'];
 }
+
+include 'config.php';
+$username = $_SESSION['username'];
+$sql = mysqli_query($Connection, "SELECT * FROM `admin` where `username` = '$username'");
+$data = mysqli_fetch_array($sql);
 
 ?>
 
@@ -158,8 +161,19 @@ if (!isset($_SESSION['username'])) {
                     </div>
 
                     <!-- Content Row -->
-                    <div class="file-input-container">
-                        <img class="img-fluid" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="file-input-container">
+                                    <img class="img-fluid" src="proccess/<?php echo $data['gambar'] ?>" alt="Preview Gambar">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Username :</h3>
+                                <h5><?php echo $username ?></h5>
+                                <a href="update_admin.php"><button class="btn btn-primary">Update your data</button></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
