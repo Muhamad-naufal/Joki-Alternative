@@ -171,7 +171,7 @@ $data = mysqli_fetch_array($sql);
                             <div class="col-md-6">
                                 <h3>Username :</h3>
                                 <h5><?php echo $username ?></h5>
-                                <a href="update_admin.php"><button class="btn btn-primary">Update your data</button></a>
+                                <!-- <a href="update_admin.php"><button class="btn btn-primary">Update your data</button></a> -->
                             </div>
                         </div>
                     </div>

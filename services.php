@@ -14,8 +14,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `product`");
   <meta content="" name="keywords" />
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon" />
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <link href="assets/img/logo.png" rel="icon" />
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect" />
@@ -38,7 +37,10 @@ $sql = mysqli_query($Connection, "SELECT * FROM `product`");
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/logo_tulisan.png" alt="" />
+        <img class="img-fluid " src="assets/img/logo_tulisan.png" alt="" />
+        <div class="row">
+          <p class="pt_name">General Steel <br /> Indonesia</p>
+        </div>
       </a>
 
       <nav id="navmenu" class="navmenu">
