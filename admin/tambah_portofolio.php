@@ -6,8 +6,6 @@ if (!isset($_SESSION['username'])) {
   $username = $_SESSION['username'];
 }
 
-include "config.php";
-$query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
 ?>
 
 <!DOCTYPE html>
@@ -20,17 +18,47 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <title>GSI Admin - Product</title>
+  <title>GSI Admin - Tambah Portofolio</title>
 
-  <!-- Custom fonts for this template -->
+  <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
 
-  <!-- Custom styles for this template -->
+  <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+  <style>
+    /* Tambahan */
+    .file-input-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border: 2px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+    }
 
-  <!-- Custom styles for this page -->
-  <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    .file-input-container:hover {
+      border-color: #999;
+    }
+
+    .file-input-container i {
+      font-size: 50px;
+      color: #ccc;
+    }
+
+    .file-input-container input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body id="page-top">
@@ -43,7 +71,7 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
         <div class="sidebar-brand-icon">
           <img class="img-fluid" width="40px" height="40px" src="img/logo_bulet.png" alt="" />
         </div>
-        <div class="sidebar-brand-text mx-3">GSI Admin</div>
+        <div class="sidebar-brand-text mx-3">SGI Admin</div>
       </a>
 
       <!-- Divider -->
@@ -63,14 +91,14 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
       <div class="sidebar-heading">Interface</div>
 
       <!-- Nav Item - Charts -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="product.php">
           <i class="fa-solid fa-shop"></i>
           <span>Product</span></a>
       </li>
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="portofolio.php">
           <i class="fa-solid fa-bars-progress"></i>
           <span>Portofolio</span></a>
@@ -127,77 +155,40 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Portofolio</h1>
-
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+          <h1 class="h3 mb-1 text-gray-800">Tambah Portofolio</h1>
+          <div class="card position-relative">
             <div class="card-header py-3">
-              <div class="row">
-                <div class="col">
-                  <h6 class="m-0 font-weight-bold text-primary">Data Portofolio</h6>
-                </div>
-                <div class="col text-right">
-                  <a href="tambah_portofolio.php" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Tambah Portofolio</a>
-                </div>
-              </div>
+              <h6 class="m-0 font-weight-bold text-primary">
+                Form Tambah Portofolio
+              </h6>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama</th>
-                      <th>Gambar</th>
-                      <th>Keterangan</th>
-                      <th>Nama PT</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama</th>
-                      <th>Gambar</th>
-                      <th>Keterangan</th>
-                      <th>Nama PT</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </tfoot>
-                  <tbody>
-                    <?php
-                    $no = 1;
-                    $result = mysqli_query($Connection, $query);
-                    while ($row = mysqli_fetch_assoc($result)) :
-                      $id = $row['porto_id'];
-                      $nama = $row['nama_porto'];
-                      $gambar = $row['gambar'];
-                      $keterangan = $row['ket_porto'];
-                      $nama_pt = $row['nama_pt'];
-                    ?>
-                      <tr>
-                        <td><?php echo $no ?></td>
-                        <td><?php echo $nama ?></td>
-                        <td>
-                          <img src="proccess/<?php echo $gambar?>" alt="gambar" width="100px" height="100px" />
-                        </td>
-                        <td>
-                        <?php echo $keterangan?>
-                        </td>
-                        <td>
-                        <?php echo $nama_pt?>
-                        </td>
-                        <td>
-                          <a href="edit_porto.php?porto_id=<?php echo $id?>" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                          <a href="proccess/hapus_porto.php?porto_id=<?php echo $row['porto_id'] ?>" class="btn btn-danger" onclick="return confirm('Data Akan Dihapus?')"><i class="fa-solid fa-trash"></i></a>
-                        </td>
-                      </tr>
-                    <?php
-                      $no++;
-                    endwhile; ?>
-                  </tbody>
-                </table>
-              </div>
+              <form action="proccess/add_portofolio.php" method="post" enctype="multipart/form-data">
+                <div class="file-input-container mb-2">
+                  <input type="file" id="game-image" name="game-image">
+                  <img class="img-fluid" id="game-image-preview" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
+                </div>
+                <div class="mb-3">
+                  <label for="game-title" class="form-label">Nama Projek</label>
+                  <input type="text" class="form-control" id="nama_porto" name="nama_porto" required>
+                </div>
+                <div class="mb-3">
+                  <label for="game-title" class="form-label">Nama PT</label>
+                  <input type="text" class="form-control" id="nama_pt" name="nama_pt" required>
+                </div>
+                <div class="mb-3">
+                  <label for="product-description" class="form-label">Deskripsi Portofolio</label>
+                  <textarea class="form-control" id="ket_porto" name="ket_porto" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Masukkan</button>
+              </form>
+
+              <br />
+              <p class="mb-0 small">
+                Note: This utility animates the CSS opacity property,
+                meaning it will override any existing opacity on an
+                element being animated!
+              </p>
             </div>
           </div>
         </div>
@@ -209,7 +200,7 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; General Steel Indonesia 2024</span>
+            <span>Copyright &copy; Your Website 2020</span>
           </div>
         </div>
       </footer>
@@ -256,14 +247,23 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="js/demo/datatables-demo.js"></script>
   <script src="https://kit.fontawesome.com/6beb2a82fc.js" crossorigin="anonymous"></script>
+  <script>
+    document.getElementById('game-image').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('game-image-preview');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          const icon = document.querySelector('.file-input-container i');
+          icon.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
 </body>
 
 </html>

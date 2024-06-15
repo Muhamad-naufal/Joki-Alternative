@@ -2913,3 +2913,11 @@ section,
   color: color-mix(in srgb, var(--default-color), transparent 60%);
   font-size: 14px;
 }
+
+
+/* Tambahan */
+.pt_name {
+  font-size: 10px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
