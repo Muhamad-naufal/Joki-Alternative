@@ -112,6 +112,13 @@ $nama_pt = $data['nama_pt'];
           <span>Portofolio</span></a>
       </li>
 
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="pengajuan.php">
+          <i class="fa-solid fa-dollar-sign"></i>
+          <span>Pengajuan</span></a>
+      </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block" />
 

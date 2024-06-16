@@ -76,6 +76,13 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
           <span>Portofolio</span></a>
       </li>
 
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="pengajuan.php">
+          <i class="fa-solid fa-dollar-sign"></i>
+          <span>Pengajuan</span></a>
+      </li>
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block" />
 

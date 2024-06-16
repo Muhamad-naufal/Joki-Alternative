@@ -2,10 +2,18 @@
 session_start();
 if (!isset($_SESSION['user_name'])) {
   header("location:../login.php");
+  exit();
 } else {
   $username = $_SESSION['user_name'];
 }
 
+include 'config.php';
+$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
+$userData = mysqli_fetch_assoc($userQuery);
+$id_user = $userData['user_id'];
+
+$sql = "SELECT * FROM pengajuan WHERE id_user = '$id_user' ORDER BY created_at DESC";
+$result = mysqli_query($Connection, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -127,9 +135,6 @@ if (!isset($_SESSION['user_name'])) {
                 <div class="col">
                   <h6 class="m-0 font-weight-bold text-primary">Data Pengajuan</h6>
                 </div>
-                <div class="col text-right">
-                  <a href="tambah_pengajuan.php" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Tambah Pengajuan</a>
-                </div>
               </div>
             </div>
             <div class="card-body">
@@ -139,18 +144,45 @@ if (!isset($_SESSION['user_name'])) {
                     <tr>
                       <th>No</th>
                       <th>Tanggal</th>
-                      <th>Keterangan</th>
-                      <th>Lihat Detail</th>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Ket Penawaran</th>
+                      <th>Status</th>
+                      <th>Ket Status</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>No</th>
                       <th>Tanggal</th>
-                      <th>Keterangan</th>
-                      <th>Lihat Detail</th>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Ket Penawaran</th>
+                      <th>Status</th>
+                      <th>Ket Status</th>
                     </tr>
                   </tfoot>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                      $product_id = $row['id_produk'];
+                      $productQuery = mysqli_query($Connection, "SELECT nama_produk FROM product WHERE product_id = '$product_id'");
+                      $productData = mysqli_fetch_assoc($productQuery);
+                      $product_name = $productData['nama_produk'];
+                    ?>
+                      <tr>
+                        <td><?php echo $no++ ?></td>
+                        <td><?php echo $row['created_at'] ?></td>
+                        <td><?php echo $product_name ?></td>
+                        <td><?php echo $row['jumlah']?></td>
+                        <td><?php echo $row['deskripsi'] ?></td>
+                        <td><?php echo $row['status'] ?></td>
+                        <td><?php echo $row['ket'] ?></td>
+                      </tr>
+                    <?php
+                    }
+                    ?>
                 </table>
               </div>
             </div>

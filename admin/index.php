@@ -63,10 +63,18 @@ if (!isset($_SESSION['username'])) {
           <i class="fa-solid fa-shop"></i>
           <span>Product</span></a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link" href="portofolio.php">
           <i class="fa-solid fa-bars-progress"></i>
           <span>Portofolio</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="pengajuan.php">
+          <i class="fa-solid fa-dollar-sign"></i>
+          <span>Pengajuan</span></a>
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block" />

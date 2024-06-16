@@ -1,30 +1,44 @@
 <?php
 include '../config.php';
 
-$nama = $_POST['nama_prod'];
-$ket = $_POST['ket'];
-$ket = $mysqli->real_escape_string($ket);
+session_start();
 
-$target_dir = "images/";
-$target_file = $target_dir . basename($_FILES["game-image"]["name"]);
+// Check if user is logged in
+if (!isset($_SESSION['user_name'])) {
+    header("location:../login.php");
+    exit();
+}
 
-if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) {
-    echo "The file " . htmlspecialchars(basename($_FILES["game-image"]["name"])) . " has been uploaded.<br>";
+// Get user ID
+$username = $_SESSION['user_name'];
+$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
+$userData = mysqli_fetch_assoc($userQuery);
+$id_user = $userData['user_id'];
 
-    $sql = "INSERT INTO `product` (`product_id`, `nama_produk`, `gambar`, `ket_produk`, `created_at`, `update_at`) VALUES 
-    (NULL, '$nama', '$target_file', '$ket', current_timestamp(), current_timestamp())";
+// Insert data into pengajuan table
+if(isset($_POST['submit'])) {
+    // Loop through each product submitted
+    foreach($_POST['product_id'] as $key => $product_id) {
+        // Ensure product_id is not empty and quantity is greater than 1
+        $jumlah = $_POST['quantity'][$key]; // Quantity for each product
+        if(!empty($product_id) && $jumlah > 0) {
+            $ket = $_POST['ket'][$key]; // Description for each product
 
-    if (mysqli_query($Connection, $sql)) {
-        echo "New record created successfully";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($Connection);
+            // Insert the product into pengajuan table
+            $sql = "INSERT INTO `pengajuan` (`id_produk`, `id_user`, `deskripsi`, `created_at`, `jumlah`, `status`) 
+                    VALUES ('$product_id', '$id_user', '$ket', current_timestamp(), '$jumlah', 'pending')";
+            
+            if (mysqli_query($Connection, $sql)) {
+                echo "New record created successfully for product ID: $product_id<br>";
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($Connection);
+            }
+        }
     }
-} else {
-    echo "Sorry, there was an error uploading your file.<br>";
 }
 
 mysqli_close($Connection);
 
-header("Location: ../product.php");
+header("Location: ../pengajuan.php");
 exit();
 ?>

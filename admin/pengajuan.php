@@ -1,11 +1,14 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_name'])) {
-  header("location:../login.php");
+if (!isset($_SESSION['username'])) {
+  header("location:login.php");
 } else {
-  $username = $_SESSION['user_name'];
+  $username = $_SESSION['username'];
 }
 
+include "config.php";
+$sql = "SELECT p.*, u.user_name, u.email, pr.nama_produk FROM pengajuan as p JOIN user as u ON p.id_user = u.user_id JOIN product as pr ON p.id_produk = pr.product_id ORDER BY p.created_at DESC";
+$data = mysqli_query($Connection, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -18,47 +21,17 @@ if (!isset($_SESSION['user_name'])) {
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <title>GSI User - Tambah Pengajuan</title>
+  <title>GSI Admin - Pengajuan</title>
 
-  <!-- Custom fonts for this template-->
+  <!-- Custom fonts for this template -->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
 
-  <!-- Custom styles for this template-->
+  <!-- Custom styles for this template -->
   <link href="css/sb-admin-2.min.css" rel="stylesheet" />
-  <style>
-    /* Tambahan */
-    .file-input-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border: 2px dashed #ccc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-    }
 
-    .file-input-container:hover {
-      border-color: #999;
-    }
-
-    .file-input-container i {
-      font-size: 50px;
-      color: #ccc;
-    }
-
-    .file-input-container input[type="file"] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-  </style>
+  <!-- Custom styles for this page -->
+  <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -71,7 +44,7 @@ if (!isset($_SESSION['user_name'])) {
         <div class="sidebar-brand-icon">
           <img class="img-fluid" width="40px" height="40px" src="img/logo_bulet.png" alt="" />
         </div>
-        <div class="sidebar-brand-text mx-3">GSI User Dashboard</div>
+        <div class="sidebar-brand-text mx-3">GSI Admin</div>
       </a>
 
       <!-- Divider -->
@@ -92,8 +65,22 @@ if (!isset($_SESSION['user_name'])) {
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link" href="pengajuan.php">
+        <a class="nav-link" href="product.php">
           <i class="fa-solid fa-shop"></i>
+          <span>Product</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="portofolio.php">
+          <i class="fa-solid fa-bars-progress"></i>
+          <span>Portofolio</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item active">
+        <a class="nav-link" href="pengajuan.php">
+          <i class="fa-solid fa-dollar-sign"></i>
           <span>Pengajuan</span></a>
       </li>
 
@@ -148,61 +135,77 @@ if (!isset($_SESSION['user_name'])) {
         <!-- Begin Page Content -->
         <div class="container-fluid">
           <!-- Page Heading -->
-          <h1 class="h3 mb-1 text-gray-800">Tambah Pengajuan</h1>
-          <div class="card position-relative">
+          <h1 class="h3 mb-2 text-gray-800">Pengajuan</h1>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">
-                Form Tambah Pengajuan
-              </h6>
+              <div class="row">
+                <div class="col">
+                  <h6 class="m-0 font-weight-bold text-primary">Data Pengajuan</h6>
+                </div>
+              </div>
             </div>
             <div class="card-body">
-              <form action="proccess/add_pengajuan.php" method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                  <label for="product-name" class="form-label">Silahkan Pilih Barang</label>
-                  <div class="mb-3" style="max-height: 200px; overflow-y: auto;">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal</th>
+                      <th>Nama User</th>
+                      <th>Email</th>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Keterangan</th>
+                      <th>Status</th>
+                      <th>Keterangan Status</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal</th>
+                      <th>Nama User</th>
+                      <th>Email</th>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Keterangan</th>
+                      <th>Status</th>
+                      <th>Keterangan Status</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
                     <?php
-                    include 'config.php';
-                    $sql = "SELECT * FROM product";
-                    $result = $Connection->query($sql);
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
+                    $no = 1;
+                    while ($row = mysqli_fetch_array($data)) {
                     ?>
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="container">
-                            <div class="row">
-                              <div class="col">
-                                <img src="../admin/proccess/<?php echo $row['gambar']; ?>" alt="product-image" class="img-fluid" style="max-width:50px" />
-                              </div>
-                              <div class="col">
-                                <span><?php echo $row['nama_produk']; ?></span>
-                                <input type="hidden" value="<?php echo $row['product_id'] ?>" name="product_id[]">
-                              </div>
-                              <div class="col">
-                                <div class="input-group">
-                                  <button class="btn btn-outline-secondary minus-btn" type="button">-</button>
-                                  <input type="number" class="form-control quantity-input" name="quantity[]" value="0" min="0">
-                                  <button class="btn btn-outline-secondary plus-btn" type="button">+</button>
-                                </div>
-                              </div>
-                              <div class="col">
-                                <textarea class="form-control" name="ket[]" rows="2" placeholder="Deskripsi Tambahan (Optional)"></textarea>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <tr>
+                        <td><?php echo $no++ ?></td>
+                        <td><?php echo $row['created_at'] ?></td>
+                        <td><?php echo $row['user_name'] ?></td>
+                        <td><?php echo $row['email'] ?></td>
+                        <td><?php echo $row['nama_produk'] ?></td>
+                        <td><?php echo $row['jumlah'] ?></td>
+                        <td><?php echo $row['deskripsi'] ?></td>
+                        <td>
+                          <form action="update_status.php" method="post">
+                            <input type="hidden" name="id_pengajuan" value="<?php echo $row['id_pengajuan']; ?>">
+                            <select name="status" class="status-dropdown" data-id="<?php echo $row['id_pengajuan']; ?>">
+                              <option value="pending" <?php if ($row['status'] == 'pending') echo 'selected'; ?>>Pending</option>
+                              <option value="accept" <?php if ($row['status'] == 'accept') echo 'selected'; ?>>Accept</option>
+                              <option value="reject" <?php if ($row['status'] == 'reject') echo 'selected'; ?>>Reject</option>
+                            </select>
+                          </form>
+                        </td>
+                        <td><?php echo $row['ket'] ?></td>
+                      </tr>
                     <?php
-                      }
                     }
                     ?>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary" name="submit">Masukkan</button>
-              </form>
-
-              <br />
-              <p class="mb-0 small">
-                Note: Masukkan jenis pengajuan yang diinginkan dan jumlah dari barang yang diinginkan.
-              </p>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -252,6 +255,34 @@ if (!isset($_SESSION['user_name'])) {
     </div>
   </div>
 
+  <!-- Rejection Reason Modal-->
+  <div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form action="update_status.php" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rejectionModalLabel">Reason for Rejection</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_pengajuan" id="rejection-id" value="">
+            <input type="hidden" name="status" value="reject">
+            <div class="form-group">
+              <label for="reason">Reason:</label>
+              <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -261,23 +292,26 @@ if (!isset($_SESSION['user_name'])) {
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-  <script src="https://kit.fontawesome.com/6beb2a82fc.js" crossorigin="anonymous"></script>
-  <script>
-    document.querySelectorAll('.minus-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        var quantityInput = this.nextElementSibling;
-        var currentValue = parseInt(quantityInput.value);
-        if (currentValue > 0) {
-          quantityInput.value = currentValue - 1;
-        }
-      });
-    });
 
-    document.querySelectorAll('.plus-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        var quantityInput = this.previousElementSibling;
-        var currentValue = parseInt(quantityInput.value);
-        quantityInput.value = currentValue + 1;
+  <!-- Page level plugins -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="js/demo/datatables-demo.js"></script>
+  <script src="https://kit.fontawesome.com/6beb2a82fc.js" crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('.status-dropdown').change(function() {
+        var status = $(this).val();
+        var id = $(this).data('id');
+        if (status === 'reject') {
+          $('#rejection-id').val(id);
+          $('#rejectionModal').modal('show');
+        } else {
+          $(this).closest('form').submit();
+        }
       });
     });
   </script>
