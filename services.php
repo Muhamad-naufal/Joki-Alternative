@@ -1,6 +1,7 @@
 <?php
 include 'admin/config.php';
 $sql = mysqli_query($Connection, "SELECT * FROM `product`");
+$data = mysqli_fetch_array($sql);
 ?>
 
 <!DOCTYPE html>
@@ -79,25 +80,25 @@ $sql = mysqli_query($Connection, "SELECT * FROM `product`");
       <div class="container">
         <div class="row gy-4">
           <?php
-          while ($data = mysqli_fetch_array($sql)) {
+          function limit_words($string, $word_limit)
+          {
+            $words = explode(' ', $string);
+            return implode(' ', array_slice($words, 0, $word_limit));
+          }
+
+          $limited_text = limit_words($data['ket_produk'], 10);
+          while ($data1 = mysqli_fetch_array($sql)) {
           ?>
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
               <div class="service-item position-relative">
-                <img src="admin/proccess/<?php echo $data['gambar'] ?>" class="img-fluid" />
-                <h3><?php echo $data['nama_produk'] ?></h3>
+                <img src="admin/proccess/<?php echo $data1['gambar'] ?>" class="img-fluid" />
+                <h3><?php echo $data1['nama_produk'] ?></h3>
                 <p>
                   <?php
-                  function limit_words($string, $word_limit)
-                  {
-                    $words = explode(' ', $string);
-                    return implode(' ', array_slice($words, 0, $word_limit));
-                  }
-
-                  $limited_text = limit_words($data['ket_produk'], 10);
                   echo $limited_text;
                   ?>
                 </p>
-                <a href="#" class="readmore stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-name="<?php echo $data['nama_produk'] ?>" data-image="admin/proccess/<?php echo $data['gambar'] ?>" data-description="<?php echo $data['ket_produk'] ?>">Read more <i class="bi bi-arrow-right"></i></a>
+                <a href="#" class="readmore stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-name="<?php echo $data1['nama_produk'] ?>" data-image="admin/proccess/<?php echo $data1['gambar'] ?>" data-description="<?php echo $data1['ket_produk'] ?>">Read more <i class="bi bi-arrow-right"></i></a>
               </div>
             </div>
           <?php
@@ -128,6 +129,11 @@ $sql = mysqli_query($Connection, "SELECT * FROM `product`");
       </div>
     </div>
 
+    <!-- Information Section -->
+    <section class="info_login">
+      <h2>Anda ingin mendapatkan penawaran harga khusus? <br> <a href="login.php"><span class="login_info">Login Terlebih Dahulu</span></a></h2>
+      <p class="tulisan">Dengan Login, Anda bisa melakukan penawaran secara mandiri dan akan langsung ditanggapi oleh admin kami. Manfaat lain adalah anda akan bisa melakukan pengecekan status pengajuan penarawan Anda pada menu dashboard user</p>
+    </section>
     <!-- /Testimonials Section -->
   </main>
 

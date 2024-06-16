@@ -3,7 +3,6 @@ include '../config.php';
 
 $nama = $_POST['nama_prod'];
 $ket = $_POST['ket'];
-$ket = $mysqli->real_escape_string($ket);
 
 $target_dir = "images/";
 $target_file = $target_dir . basename($_FILES["game-image"]["name"]);
