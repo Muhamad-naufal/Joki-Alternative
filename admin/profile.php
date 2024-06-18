@@ -29,39 +29,6 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
-    <style>
-        /* Tambahan */
-        .file-input-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border: 2px dashed #ccc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        .file-input-container:hover {
-            border-color: #999;
-        }
-
-        .file-input-container i {
-            font-size: 50px;
-            color: #ccc;
-        }
-
-        .file-input-container input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -171,14 +138,8 @@ $data = mysqli_fetch_array($sql);
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="file-input-container">
-                                    <img class="img-fluid" src="proccess/<?php echo $data['gambar'] ?>" alt="Preview Gambar">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
                                 <h3>Username :</h3>
                                 <h5><?php echo $username ?></h5>
-                                <!-- <a href="update_admin.php"><button class="btn btn-primary">Update your data</button></a> -->
                             </div>
                         </div>
                     </div>
@@ -223,7 +184,7 @@ $data = mysqli_fetch_array($sql);
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">
                         Cancel
                     </button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
                 </div>
             </div>
         </div>

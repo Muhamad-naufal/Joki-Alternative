@@ -10,7 +10,7 @@ $data = mysqli_fetch_array($sql);
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Services - General Steel Indonesia</title>
+  <title>Product - General Steel Indonesia</title>
   <meta content="" name="description" />
   <meta content="" name="keywords" />
 
@@ -32,6 +32,26 @@ $data = mysqli_fetch_array($sql);
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
+  <style>
+    .btn-get-ajukan {
+      color: var(--contrast-color);
+      font-family: var(--heading-font);
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: 1px;
+      display: inline-block;
+      padding: 12px 40px;
+      border-radius: 50px;
+      transition: 0.5s;
+      margin: 10px;
+      border: 2px solid var(--accent-color);
+    }
+
+    .btn-get-ajukan:hover {
+      background: var(--accent-color);
+      color: var(--contrast-color);
+    }
+  </style>
 </head>
 
 <body class="services-page">
@@ -46,11 +66,11 @@ $data = mysqli_fetch_array($sql);
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php">About</a></li>
           <li><a href="services.html" class="active">Product</a></li>
           <li><a href="projects.php">Portofolio</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.php">Contact</a></li>
           <li>
             <a href="https://wa.me/6281294443660"><img src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png" alt="" srcset="" /></a>
           </li>
@@ -67,10 +87,13 @@ $data = mysqli_fetch_array($sql);
         <h1>Product</h1>
         <nav class="breadcrumbs">
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li class="current">Product</li>
           </ol>
         </nav>
+        <div class="mt-3">
+          <a href="dashboard/index.php" class="btn-get-ajukan">Ajukan Penawaran</a>
+        </div>
       </div>
     </div>
     <!-- End Page Title -->
@@ -128,13 +151,6 @@ $data = mysqli_fetch_array($sql);
         </div>
       </div>
     </div>
-
-    <!-- Information Section -->
-    <section class="info_login">
-      <h2>Anda ingin mendapatkan penawaran harga khusus? <br> <a href="login.php"><span class="login_info">Login Terlebih Dahulu</span></a></h2>
-      <p class="tulisan">Dengan Login, Anda bisa melakukan penawaran secara mandiri dan akan langsung ditanggapi oleh admin kami. Manfaat lain adalah anda akan bisa melakukan pengecekan status pengajuan penarawan Anda pada menu dashboard user</p>
-    </section>
-    <!-- /Testimonials Section -->
   </main>
 
   <footer id="footer" class="footer">

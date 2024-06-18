@@ -14,6 +14,9 @@ $id_user = $userData['user_id'];
 
 $sql = "SELECT * FROM pengajuan WHERE id_user = '$id_user' ORDER BY created_at DESC";
 $result = mysqli_query($Connection, $sql);
+
+$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_name` = '$username'");
+$data = mysqli_fetch_array($syntax);
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +107,7 @@ $result = mysqli_query($Connection, $sql);
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                <img class="img-profile rounded-circle" src="proccess/<?php echo $data['gambar']?>" />
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -134,6 +137,14 @@ $result = mysqli_query($Connection, $sql);
               <div class="row">
                 <div class="col">
                   <h6 class="m-0 font-weight-bold text-primary">Data Pengajuan</h6>
+                </div>
+                <div class="col">
+                  <a href="tambah_pengajuan.php" class="btn btn-primary btn-icon-split float-right">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Tambah Pengajuan</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -228,7 +239,7 @@ $result = mysqli_query($Connection, $sql);
           <button class="btn btn-secondary" type="button" data-dismiss="modal">
             Cancel
           </button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="../logout.php">Logout</a>
         </div>
       </div>
     </div>

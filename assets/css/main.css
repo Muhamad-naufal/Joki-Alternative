@@ -2921,22 +2921,3 @@ section,
   font-weight: 700;
   margin-bottom: 0px;
 }
-.info_login {
-  font-size: 10px;
-  font-weight: 400;
-  margin-bottom: 0px;
-  text-align: center;
-}
-.login_info { 
-  font-weight: 700;
-  margin-bottom: 0px;
-  text-align: center;
-}
-.tulisan {
-  padding-left: 30px;
-  padding-right: 30px;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 0px;
-  margin-top: 20px;
-}

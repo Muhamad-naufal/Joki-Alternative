@@ -6,6 +6,10 @@ if (!isset($_SESSION['user_name'])) {
   $username = $_SESSION['user_name'];
 }
 
+include 'config.php';
+$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_name` = '$username'");
+$data = mysqli_fetch_array($syntax);
+
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +130,7 @@ if (!isset($_SESSION['user_name'])) {
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                <img class="img-profile rounded-circle" src="proccess/<?php echo $data['gambar']?>" />
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -246,7 +250,7 @@ if (!isset($_SESSION['user_name'])) {
           <button class="btn btn-secondary" type="button" data-dismiss="modal">
             Cancel
           </button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="../logout.php">Logout</a>
         </div>
       </div>
     </div>

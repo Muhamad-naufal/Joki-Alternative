@@ -45,11 +45,11 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.php">About</a></li>
           <li><a href="services.php">Product</a></li>
           <li><a href="projects.php" class="active">Portofolio</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.php">Contact</a></li>
           <li>
             <a href="https://wa.me/6281294443660"><img src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png" alt="" srcset="" /></a>
           </li>

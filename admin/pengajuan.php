@@ -32,6 +32,7 @@ $data = mysqli_query($Connection, $sql);
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+  
 </head>
 
 <body id="page-top">
@@ -191,7 +192,7 @@ $data = mysqli_query($Connection, $sql);
                         <td>
                           <form action="update_status.php" method="post">
                             <input type="hidden" name="id_pengajuan" value="<?php echo $row['id_pengajuan']; ?>">
-                            <select name="status" class="status-dropdown" data-id="<?php echo $row['id_pengajuan']; ?>">
+                            <select name="status" class="status-dropdown btn btn-secondary dropdown-toggle" data-id="<?php echo $row['id_pengajuan']; ?>">
                               <option value="pending" <?php if ($row['status'] == 'pending') echo 'selected'; ?>>Pending</option>
                               <option value="accept" <?php if ($row['status'] == 'accept') echo 'selected'; ?>>Accept</option>
                               <option value="reject" <?php if ($row['status'] == 'reject') echo 'selected'; ?>>Reject</option>
@@ -249,7 +250,7 @@ $data = mysqli_query($Connection, $sql);
           <button class="btn btn-secondary" type="button" data-dismiss="modal">
             Cancel
           </button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="logout.php">Logout</a>
         </div>
       </div>
     </div>
@@ -261,7 +262,7 @@ $data = mysqli_query($Connection, $sql);
       <div class="modal-content">
         <form action="update_status.php" method="post">
           <div class="modal-header">
-            <h5 class="modal-title" id="rejectionModalLabel">Reason for Rejection</h5>
+            <h5 class="modal-title" id="rejectionModalLabel">Alasan Penolakan</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -270,7 +271,7 @@ $data = mysqli_query($Connection, $sql);
             <input type="hidden" name="id_pengajuan" id="rejection-id" value="">
             <input type="hidden" name="status" value="reject">
             <div class="form-group">
-              <label for="reason">Reason:</label>
+              <label for="reason">Alasan:</label>
               <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
             </div>
           </div>
