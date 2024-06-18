@@ -128,11 +128,11 @@ $data = mysqli_fetch_array($sql);
         <div class="row gy-4">
           <form action="proccess/add_pengajuan.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-              <label for="nama_pt">Nama PT</label>
+              <label for="nama_pt">Nama PT (atau pribadi)</label>
               <input class="form-control" type="text" name="nama_pt" id="nama_pt" required>
             </div>
             <div class="mb-3">
-              <label for="nama_pt">Email PT</label>
+              <label for="nama_pt">Email PT (atau pribadi)</label>
               <input class="form-control" type="text" name="email_pt" id="email_pt" required>
             </div>
             <div class="mb-3">
@@ -178,7 +178,7 @@ $data = mysqli_fetch_array($sql);
           </form>
           <br />
           <p class="mb-0 small">
-            Note: pilih barang yang diinginkan, jumlah yang diinginkan, dengan deskripsi tambahan (optional).
+            Note: Masukkan nama PT atau Nama Pribadi, email perusahaan atau pribadi, pilih barang yang diinginkan, jumlah yang diinginkan, dengan deskripsi tambahan (optional).
           </p>
         </div>
       </div>
