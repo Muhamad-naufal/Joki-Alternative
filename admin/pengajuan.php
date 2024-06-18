@@ -7,7 +7,8 @@ if (!isset($_SESSION['username'])) {
 }
 
 include "config.php";
-$sql = "SELECT p.*, u.user_name, u.email, pr.nama_produk FROM pengajuan as p JOIN user as u ON p.id_user = u.user_id JOIN product as pr ON p.id_produk = pr.product_id ORDER BY p.created_at DESC";
+$sql = "SELECT p.*, u.user_name, u.email, pr.nama_produk FROM pengajuan as p JOIN user as u ON p.id_user = u.user_id JOIN product as pr ON p.id_produk = pr.product_id ORDER BY CASE WHEN p.status = 'pending' THEN 1 WHEN p.status = 'reject' THEN 2 ELSE 3 END, p.created_at DESC";
+
 $data = mysqli_query($Connection, $sql);
 ?>
 
@@ -32,7 +33,7 @@ $data = mysqli_query($Connection, $sql);
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
-  
+
 </head>
 
 <body id="page-top">
@@ -155,12 +156,12 @@ $data = mysqli_query($Connection, $sql);
                       <th>No</th>
                       <th>Tanggal</th>
                       <th>Nama User</th>
-                      <th>Email</th>
+                      <th>Nama PT</th>
+                      <th>Email PT</th>
                       <th>Nama Barang</th>
                       <th>Jumlah</th>
                       <th>Keterangan</th>
                       <th>Status</th>
-                      <th>Keterangan Status</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -168,12 +169,12 @@ $data = mysqli_query($Connection, $sql);
                       <th>No</th>
                       <th>Tanggal</th>
                       <th>Nama User</th>
-                      <th>Email</th>
+                      <th>Nama PT</th>
+                      <th>Email PT</th>
                       <th>Nama Barang</th>
                       <th>Jumlah</th>
                       <th>Keterangan</th>
                       <th>Status</th>
-                      <th>Keterangan Status</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -185,21 +186,26 @@ $data = mysqli_query($Connection, $sql);
                         <td><?php echo $no++ ?></td>
                         <td><?php echo $row['created_at'] ?></td>
                         <td><?php echo $row['user_name'] ?></td>
-                        <td><?php echo $row['email'] ?></td>
+                        <td><?php echo $row['nama_pt'] ?></td>
+                        <td><?php echo $row['email_usaha'] ?></td>
                         <td><?php echo $row['nama_produk'] ?></td>
                         <td><?php echo $row['jumlah'] ?></td>
                         <td><?php echo $row['deskripsi'] ?></td>
                         <td>
-                          <form action="update_status.php" method="post">
-                            <input type="hidden" name="id_pengajuan" value="<?php echo $row['id_pengajuan']; ?>">
-                            <select name="status" class="status-dropdown btn btn-secondary dropdown-toggle" data-id="<?php echo $row['id_pengajuan']; ?>">
-                              <option value="pending" <?php if ($row['status'] == 'pending') echo 'selected'; ?>>Pending</option>
-                              <option value="accept" <?php if ($row['status'] == 'accept') echo 'selected'; ?>>Accept</option>
-                              <option value="reject" <?php if ($row['status'] == 'reject') echo 'selected'; ?>>Reject</option>
-                            </select>
+                          <form action="update_status.php" method="post" class="status-form">
+                            <input type="hidden" name="id_pengajuan" value="<?php echo htmlspecialchars($row['id_pengajuan']); ?>">
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php echo ucfirst($row['status']); ?>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item" type="submit" name="status" value="pending" <?php if ($row['status'] == 'pending') echo 'selected'; ?>>Pending</button>
+                                <button class="dropdown-item" type="submit" name="status" value="accept" <?php if ($row['status'] == 'accept') echo 'selected'; ?>>Accept</button>
+                                <button class="dropdown-item" type="submit" name="status" value="process" <?php if ($row['status'] == 'process') echo 'selected'; ?>>Process</button>
+                              </div>
+                            </div>
                           </form>
                         </td>
-                        <td><?php echo $row['ket'] ?></td>
                       </tr>
                     <?php
                     }
@@ -208,6 +214,15 @@ $data = mysqli_query($Connection, $sql);
                 </table>
               </div>
             </div>
+
+            <script>
+              document.querySelectorAll('.status-dropdown').forEach(function(element) {
+                element.addEventListener('change', function() {
+                  this.closest('form').submit();
+                });
+              });
+            </script>
+
           </div>
         </div>
         <!-- /.container-fluid -->
@@ -256,34 +271,6 @@ $data = mysqli_query($Connection, $sql);
     </div>
   </div>
 
-  <!-- Rejection Reason Modal-->
-  <div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog" aria-labelledby="rejectionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <form action="update_status.php" method="post">
-          <div class="modal-header">
-            <h5 class="modal-title" id="rejectionModalLabel">Alasan Penolakan</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" name="id_pengajuan" id="rejection-id" value="">
-            <input type="hidden" name="status" value="reject">
-            <div class="form-group">
-              <label for="reason">Alasan:</label>
-              <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary" type="submit">Submit</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -301,21 +288,8 @@ $data = mysqli_query($Connection, $sql);
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
   <script src="https://kit.fontawesome.com/6beb2a82fc.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <script>
-    $(document).ready(function() {
-      $('.status-dropdown').change(function() {
-        var status = $(this).val();
-        var id = $(this).data('id');
-        if (status === 'reject') {
-          $('#rejection-id').val(id);
-          $('#rejectionModal').modal('show');
-        } else {
-          $(this).closest('form').submit();
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>

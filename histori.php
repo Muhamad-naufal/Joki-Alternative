@@ -1,6 +1,16 @@
 <?php
-include 'admin/config.php';
-$sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
+session_start();
+include 'proccess/config.php';
+$username = $_SESSION['user_name'];
+$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
+$userData = mysqli_fetch_assoc($userQuery);
+$id_user = $userData['user_id'];
+
+$sql = "SELECT * FROM pengajuan WHERE id_user = '$id_user' ORDER BY CASE WHEN `status` = 'pending' THEN 1 WHEN `status` = 'proccess' THEN 2 ELSE 3 END, created_at DESC";
+$result = mysqli_query($Connection, $sql);
+
+$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_name` = '$username'");
+$data = mysqli_fetch_array($syntax);
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +19,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Portofolio - General Steel Indonesia</title>
+  <title>Histori - General Steel Indonesia</title>
   <meta content="" name="description" />
   <meta content="" name="keywords" />
 
@@ -31,30 +41,58 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
+  <link href="assets/css/tambahan.css" rel="stylesheet" />
 </head>
 
-<body class="projects-page">
+<body class="about-page">
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
-        <img class="img-fluid " src="assets/img/logo_tulisan.png" alt="" />
+        <img class="img-fluid" src="assets/img/logo_tulisan.png" alt="" />
         <div class="row">
-          <p class="pt_name">General Steel <br /> Indonesia</p>
+          <p class="pt_name">
+            General Steel <br />
+            Indonesia
+          </p>
         </div>
       </a>
 
       <nav id="navmenu" class="navmenu">
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="services.php">Product</a></li>
-          <li><a href="projects.php" class="active">Portofolio</a></li>
-          <li><a href="contact.php">Contact</a></li>
+          <?php
+          if (!isset($_SESSION['user_name'])) {
+            echo '<li><a href="about.php">About</a></li>';
+            echo '<li><a href="projects.php">Portfolio</a></li>';
+            echo '<li><a href="services.php">Product</a></li>';
+            echo '<li><a href="contact.php">Contact</a></li>';
+          }
+          ?>
           <li>
-          <a href="login.php">Login</a>
+            <?php
+            if (isset($_SESSION['user_name'])) {
+              // Assuming you have the user's profile picture URL stored in the session or database
+              $username = $_SESSION['user_name'];
+              $sql4 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
+              $data4 = mysqli_fetch_array($sql4);
+              $profilePictureUrl = 'dashboard/proccess/' . $data4['gambar'];
+              echo '
+              <li><a href="services_login.php">Pengajuan</a></li>
+              <div class="profile">
+                  <img src="' . $profilePictureUrl . '" alt="Profile Picture">
+                  <div class="dropdown-content">
+                      <a href="profile.php">Profile</a>
+                      <a href="histori.php">History</a>
+                      <a href="proccess/logout.php">Logout</a>
+                  </div>
+              </div>';
+            } else {
+              echo '<a href="login.php">Login</a>';
+            }
+            ?>
           </li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
     </div>
   </header>
@@ -63,78 +101,70 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
     <!-- Page Title -->
     <div class="page-title" data-aos="fade" style="background-image: url(assets/img/page-title-bg.jpg)">
       <div class="container position-relative">
-        <h1>Portofolio</h1>
+        <h1>Histori</h1>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">Portofolio</li>
+            <li class="current">Histori</li>
           </ol>
         </nav>
       </div>
     </div>
     <!-- End Page Title -->
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects section">
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Portofolio</h2>
-        <p>
-          Dibawah adalah beberapa projek yang sudah kami kerjakan dengan
-          sangat baik dan rapih. Kami selalu memberikan yang terbaik untuk
-          setiap projek yang kami kerjakan.
-        </p>
-      </div>
-      <!-- End Section Title -->
-
+    <!-- About Section -->
+    <section id="about" class="about section">
       <div class="container">
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-            <!-- Portfolio Container -->
-            <?php
-            while ($data = mysqli_fetch_array($sql)) {
-            ?>
-              <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-remodeling">
-                <div class="portfolio-content h-100">
-                  <img src="admin/proccess/<?php echo $data['gambar'] ?>" class="img-fluid" alt="" />
-                  <div class="portfolio-info">
-                    <h4><?php echo $data['nama_pt'] ?></h4>
-                    <p><?php echo $data['nama_porto'] ?></p>
-                    <a href="admin/proccess/<?php echo $data['gambar'] ?>" title="<?php echo $data['nama_porto'] ?>" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                    <a href="project-details.html" title="More Details" class="details-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-name="<?php echo $data['nama_porto'] ?>" data-image="admin/proccess/<?php echo $data['gambar'] ?>" data-description="<?php echo $data['ket_porto'] ?>"><i class="bi bi-link-45deg"></i></a>
-                  </div>
-                </div>
-              </div>
-            <?php
-            }
-            ?>
+        <div class="row position-relative">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th>Ket Penawaran</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th>Ket Penawaran</th>
+                  <th>Status</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                <?php
+                $no = 1;
+                while ($row = mysqli_fetch_assoc($result)) {
+                  $product_id = $row['id_produk'];
+                  $productQuery = mysqli_query($Connection, "SELECT nama_produk FROM product WHERE product_id = '$product_id'");
+                  $productData = mysqli_fetch_assoc($productQuery);
+                  $product_name = $productData['nama_produk'];
+                ?>
+                  <tr>
+                    <td><?php echo $no++ ?></td>
+                    <td><?php echo $row['created_at'] ?></td>
+                    <td><?php echo $product_name ?></td>
+                    <td><?php echo $row['jumlah'] ?></td>
+                    <td><?php echo $row['deskripsi'] ?></td>
+                    <td><?php echo $row['status'] ?></td>
+                  </tr>
+                <?php
+                }
+                ?>
+            </table>
           </div>
-          <!-- End Portfolio Container -->
         </div>
       </div>
     </section>
-    <!-- /Projects Section -->
+    <!-- /About Section -->
   </main>
-
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Project Details</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <img src="" class="img-fluid" id="modalImage" />
-          <h3 id="modalName"></h3>
-          <p id="modalDescription"></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <footer id="footer" class="footer">
     <div class="container footer-top">
@@ -206,25 +236,6 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var exampleModal = document.getElementById('exampleModal');
-      exampleModal.addEventListener('show.bs.modal', function(event) {
-        var button = event.relatedTarget;
-        var name = button.getAttribute('data-name');
-        var image = button.getAttribute('data-image');
-        var description = button.getAttribute('data-description');
-
-        var modalName = document.getElementById('modalName');
-        var modalImage = document.getElementById('modalImage');
-        var modalDescription = document.getElementById('modalDescription');
-
-        modalName.textContent = name;
-        modalImage.src = image;
-        modalDescription.textContent = description;
-      });
-    });
-  </script>
 </body>
 
 </html>

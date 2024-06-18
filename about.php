@@ -65,12 +65,7 @@
             <li><a href="projects.php">Portofolio</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li>
-              <a href="https://wa.me/6281294443660"
-                ><img
-                  src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png"
-                  alt=""
-                  srcset=""
-              /></a>
+            <a href="login.php">Login</a></li>
             </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

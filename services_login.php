@@ -1,5 +1,6 @@
 <?php
-include 'admin/config.php';
+session_start();
+include 'proccess/config.php';
 $sql = mysqli_query($Connection, "SELECT * FROM `product`");
 $data = mysqli_fetch_array($sql);
 ?>
@@ -32,6 +33,7 @@ $data = mysqli_fetch_array($sql);
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
+  <link href="assets/css/tambahan.css" rel="stylesheet" />
   <style>
     .btn-get-ajukan {
       color: var(--contrast-color);
@@ -52,6 +54,7 @@ $data = mysqli_fetch_array($sql);
       color: var(--contrast-color);
     }
   </style>
+
 </head>
 
 <body class="services-page">
@@ -65,17 +68,41 @@ $data = mysqli_fetch_array($sql);
       </a>
 
       <nav id="navmenu" class="navmenu">
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         <ul>
           <li><a href="index.php">Home</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="services.php" class="active">Product</a></li>
-          <li><a href="projects.php">Portofolio</a></li>
-          <li><a href="contact.php">Contact</a></li>
+          <?php
+          if (!isset($_SESSION['user_name'])) {
+            echo '<li><a href="about.php">About</a></li>';
+            echo '<li><a href="projects.php">Portfolio</a></li>';
+            echo '<li><a href="services.php">Product</a></li>';
+            echo '<li><a href="contact.php">Contact</a></li>';
+          }
+          ?>
           <li>
-          <a href="login.php">Login</a>
+            <?php
+            if (isset($_SESSION['user_name'])) {
+              // Assuming you have the user's profile picture URL stored in the session or database
+              $username = $_SESSION['user_name'];
+              $sql4 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
+              $data4 = mysqli_fetch_array($sql4);
+              $profilePictureUrl = 'dashboard/proccess/' . $data4['gambar'];
+              echo '
+              <li><a href="services_login.php" class="active">Pengajuan</a></li>
+              <div class="profile">
+                  <img src="' . $profilePictureUrl . '" alt="Profile Picture">
+                  <div class="dropdown-content">
+                      <a href="profile.php">Profile</a>
+                      <a href="histori.php">History</a>
+                      <a href="proccess/logout.php">Logout</a>
+                  </div>
+              </div>';
+            } else {
+              echo '<a href="login.php">Login</a>';
+            }
+            ?>
           </li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
     </div>
   </header>
@@ -91,9 +118,6 @@ $data = mysqli_fetch_array($sql);
             <li class="current">Product</li>
           </ol>
         </nav>
-        <div class="mt-3">
-          <a href="dashboard/index.php" class="btn-get-ajukan">Ajukan Penawaran</a>
-        </div>
       </div>
     </div>
     <!-- End Page Title -->
@@ -102,31 +126,60 @@ $data = mysqli_fetch_array($sql);
     <section id="services" class="services section">
       <div class="container">
         <div class="row gy-4">
-          <?php
-          function limit_words($string, $word_limit)
-          {
-            $words = explode(' ', $string);
-            return implode(' ', array_slice($words, 0, $word_limit));
-          }
-
-          $limited_text = limit_words($data['ket_produk'], 10);
-          while ($data1 = mysqli_fetch_array($sql)) {
-          ?>
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <div class="service-item position-relative">
-                <img src="admin/proccess/<?php echo $data1['gambar'] ?>" class="img-fluid" />
-                <h3><?php echo $data1['nama_produk'] ?></h3>
-                <p>
-                  <?php
-                  echo $limited_text;
-                  ?>
-                </p>
-                <a href="#" class="readmore stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-name="<?php echo $data1['nama_produk'] ?>" data-image="admin/proccess/<?php echo $data1['gambar'] ?>" data-description="<?php echo $data1['ket_produk'] ?>">Read more <i class="bi bi-arrow-right"></i></a>
+          <form action="proccess/add_pengajuan.php" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="nama_pt">Nama PT</label>
+              <input class="form-control" type="text" name="nama_pt" id="nama_pt" required>
+            </div>
+            <div class="mb-3">
+              <label for="nama_pt">Email PT</label>
+              <input class="form-control" type="text" name="email_pt" id="email_pt" required>
+            </div>
+            <div class="mb-3">
+              <label for="product-name" class="form-label">Silahkan Pilih Barang</label>
+              <div class="mb-3" style="max-height: 500px; overflow-y: auto;">
+                <?php
+                include 'proccess/config.php';
+                $sql = "SELECT * FROM product";
+                $result = $Connection->query($sql);
+                if ($result->num_rows > 0) {
+                  while ($row = $result->fetch_assoc()) {
+                ?>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <img src="admin/proccess/<?php echo $row['gambar']; ?>" alt="product-image" class="img-fluid" style="max-width:50px" />
+                          </div>
+                          <div class="col-md-3">
+                            <span><?php echo $row['nama_produk']; ?></span>
+                            <input type="hidden" value="<?php echo $row['product_id'] ?>" name="product_id[]">
+                          </div>
+                          <div class="col-md-3">
+                            <div class="input-group">
+                              <button class="btn btn-outline-secondary minus-btn" type="button">-</button>
+                              <input type="number" class="form-control quantity-input" name="quantity[]" value="0" min="0">
+                              <button class="btn btn-outline-secondary plus-btn" type="button">+</button>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <textarea class="form-control" name="ket[]" rows="2" placeholder="Deskripsi Tambahan (Optional)"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <?php
+                  }
+                }
+                ?>
               </div>
             </div>
-          <?php
-          }
-          ?>
+            <button type="submit" class="btn btn-primary" name="submit">Masukkan</button>
+          </form>
+          <br />
+          <p class="mb-0 small">
+            Note: pilih barang yang diinginkan, jumlah yang diinginkan, dengan deskripsi tambahan (optional).
+          </p>
         </div>
       </div>
     </section>
@@ -233,6 +286,54 @@ $data = mysqli_fetch_array($sql);
         modalName.textContent = name;
         modalImage.src = image;
         modalDescription.textContent = description;
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var mobileToggle = document.querySelector('.mobile-nav-toggle');
+      var navMenu = document.querySelector('.navmenu ul');
+
+      mobileToggle.addEventListener('click', function() {
+        navMenu.classList.toggle('show');
+      });
+
+      // Close the dropdown if the user clicks outside of it
+      window.onclick = function(event) {
+        if (!event.target.matches('.profile img')) {
+          var dropdowns = document.querySelectorAll('.dropdown-content');
+          dropdowns.forEach(function(dropdown) {
+            if (dropdown.style.display === 'block') {
+              dropdown.style.display = 'none';
+            }
+          });
+        }
+      };
+
+      var profilePic = document.querySelector('.profile img');
+      var dropdownContent = document.querySelector('.dropdown-content');
+
+      profilePic.addEventListener('click', function() {
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+  </script>
+  <script>
+    document.querySelectorAll('.minus-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        var quantityInput = this.nextElementSibling;
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 0) {
+          quantityInput.value = currentValue - 1;
+        }
+      });
+    });
+
+    document.querySelectorAll('.plus-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        var quantityInput = this.previousElementSibling;
+        var currentValue = parseInt(quantityInput.value);
+        quantityInput.value = currentValue + 1;
       });
     });
   </script>

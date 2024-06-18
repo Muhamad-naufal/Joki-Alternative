@@ -1,5 +1,6 @@
 <?php
-include 'dashboard/config.php';
+session_start();
+include 'proccess/config.php';
 $sql = mysqli_query($Connection, "SELECT * FROM komentar");
 $data = mysqli_fetch_array($sql);
 ?>
@@ -31,46 +32,14 @@ $data = mysqli_fetch_array($sql);
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
-  <style>
-    /* Tambahan */
-    .file-input-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border: 2px dashed #ccc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-
-    .file-input-container:hover {
-      border-color: #999;
-    }
-
-    .file-input-container i {
-      font-size: 50px;
-      color: #ccc;
-    }
-
-    .file-input-container input[type="file"] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-  </style>
+  <link href="assets/css/tambahan.css" rel="stylesheet" />
 </head>
 
 <body class="index-page">
   <!-- ======= Header ======= -->
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="index.php" class="logo d-flex align-items-center">
         <img class="img-fluid " src="assets/img/logo_tulisan.png" alt="" />
         <div class="row">
           <p class="pt_name">General Steel <br /> Indonesia</p>
@@ -80,12 +49,36 @@ $data = mysqli_fetch_array($sql);
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="index.php" class="active">Home</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="services.php">Product</a></li>
-          <li><a href="projects.php">Portofolio</a></li>
-          <li><a href="contact.php">Contact</a></li>
+          <?php
+          if (!isset($_SESSION['user_name'])) {
+            echo '<li><a href="about.php">About</a></li>';
+            echo '<li><a href="services.php">Product</a></li>';
+            echo '<li><a href="projects.php">Portfolio</a></li>';
+            echo '<li><a href="contact.php">Contact</a></li>';
+          }
+          ?>
           <li>
-            <a href="https://wa.me/6281294443660"><img src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png" alt="" srcset="" /></a>
+            <?php
+            if (isset($_SESSION['user_name'])) {
+              // Assuming you have the user's profile picture URL stored in the session or database
+              $username = $_SESSION['user_name'];
+              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
+              $data = mysqli_fetch_array($sql);
+              $profilePictureUrl = 'dashboard/proccess/' . $data['gambar'];
+              echo '
+              <li><a href="services_login.php">Pengajuan</a></li>
+              <div class="profile">
+                  <img src="' . $profilePictureUrl . '" alt="Profile Picture">
+                  <div class="dropdown-content">
+                      <a href="profile.php">Profile</a>
+                      <a href="histori.php">History</a>
+                      <a href="proccess/logout.php">Logout</a>
+                  </div>
+              </div>';
+            } else {
+              echo '<a href="login.php">Login</a>';
+            }
+            ?>
           </li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -110,7 +103,7 @@ $data = mysqli_fetch_array($sql);
                 integritas dan ketelitian untuk memastikan standar tertinggi
                 dari perencanaan hingga penyelesaian."
               </p>
-              <a href="contact.php" class="btn-get-started">Hubungi Kami </a>
+              <a href="https://wa.me/6281294443660" class="btn-get-started"><img src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png" alt="" srcset="" /></a>
             </div>
           </div>
         </div>
@@ -175,7 +168,7 @@ $data = mysqli_fetch_array($sql);
                 <div class="col-xl-7 d-flex align-items-center">
                   <div class="card-body">
                     <h4 class="card-title">Perencanaan dan Desain</h4>
-                    <p>
+                    <p style="text-align: justify;">
                       Tahap perencanaan dan desain melibatkan studi kelayakan
                       untuk menilai aspek finansial, teknis, dan hukum proyek,
                       serta pengembangan konsep dan desain detail yang
@@ -199,7 +192,7 @@ $data = mysqli_fetch_array($sql);
                 <div class="col-xl-7 d-flex align-items-center">
                   <div class="card-body">
                     <h4 class="card-title">Pengadaan</h4>
-                    <p>
+                    <p style="text-align: justify;">
                       Proses pengadaan dalam proyek konstruksi melibatkan
                       beberapa langkah penting untuk memastikan semua bahan
                       dan jasa yang diperlukan tersedia tepat waktu dan sesuai
@@ -223,7 +216,7 @@ $data = mysqli_fetch_array($sql);
                 <div class="col-xl-7 d-flex align-items-center">
                   <div class="card-body">
                     <h4 class="card-title">Konstruksi</h4>
-                    <p>
+                    <p style="text-align: justify;">
                       Proses konstruksi melibatkan beberapa tahapan utama yang
                       bertujuan untuk mewujudkan rencana desain menjadi
                       bangunan fisik
@@ -248,7 +241,7 @@ $data = mysqli_fetch_array($sql);
                     <h4 class="card-title">
                       Penyelesaian dan Pengiriman Proyek
                     </h4>
-                    <p>
+                    <p style="text-align: justify;">
                       Tahap penyelesaian dan pengiriman proyek melibatkan
                       penyelesaian pekerjaan konstruksi, pengujian dan
                       pemeriksaan, serta penyerahan proyek kepada pemilik.
@@ -273,8 +266,8 @@ $data = mysqli_fetch_array($sql);
           </div>
 
           <div class="col-lg-5 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
-            <h3>Kami sudah legal dan sudah mendapatkan banyak izin</h3>
-            <p>
+            <h3>Perizinan</h3>
+            <p style="text-align: justify;">
               Kami sudah mendapatkan banyak izin dan legalitas dari pemerintah
               untuk menjalankan bisnis ini. Kami juga sudah mendapatkan
               sertifikat dari beberapa lembaga yang berwenang.
@@ -390,7 +383,7 @@ $data = mysqli_fetch_array($sql);
               <div class="swiper-slide">
                 <div class="testimonial-wrap">
                   <div class="testimonial-item">
-                    <img src="<?php echo $data['gambar'] ?>" class="testimonial-img" alt="" />
+                    <img src="dashboard/proccess/<?php echo $data['gambar'] ?>" class="testimonial-img" alt="" />
                     <h3><?php echo $data['nama_user'] ?></h3>
                     <h4><?php
                         // Asumsikan $data['created_at'] adalah timestamp yang valid
@@ -453,105 +446,6 @@ $data = mysqli_fetch_array($sql);
       </div>
     </section>
     <!-- /Testimonials Section -->
-
-    <!-- Comments Section -->
-    <section class="comments">
-      <div class="container">
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-          <h2>Komentar</h2>
-          <p>
-            Silahkan Berikan kami saran komentar dan kritik Anda
-          </p>
-        </div>
-
-        <!-- End Section Title -->
-        <form action="tambah_komen.php" method="post" enctype="multipart/form-data">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="file-input-container mb-2">
-                  <input type="file" id="game-image" name="game-image" required>
-                  <img class="img-fluid" id="game-image-preview" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
-                </div>
-              </div>
-              <div class="col-md-9">
-                <div class="mb-3">
-                  <label for="game-title" class="form-label">Nama</label>
-                  <input type="text" class="form-control" id="nama" name="nama" required>
-                </div>
-                <div class="mb-3">
-                  <label for="input-group">Bintang</label>
-                  <div class="input-group">
-                    <button class="btn btn-outline-secondary minus-btn" type="button">-</button>
-                    <input type="number" class="form-control quantity-input" name="quantity" value="0" min="0">
-                    <button class="btn btn-outline-secondary plus-btn" type="button">+</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="product-description" class="form-label">Isi Komen</label>
-              <textarea class="form-control" id="isi" name="isi" rows="3" required></textarea>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Kirim</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Comments Section -->
-    <section class="comments">
-      <div class="container">
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-          <h2>All Cpmments</h2>
-          <p>
-            Semua Komentar Anda adalah kata - kata pembangun bagi kami
-          </p>
-        </div>
-
-        <!-- End Section Title -->
-
-        <div class="mb-3" style="max-height: 200px; overflow-y: auto; border: 1px solid black;">
-          <div class="container">
-            <div class="row mt-3">
-              <?php
-              $kode = mysqli_query($Connection, "SELECT * FROM komentar ORDER BY created_at");
-              while ($muncul = mysqli_fetch_array($kode)) {
-              ?>
-                <div class="col-md-2">
-                  <img src="<?php echo $muncul['gambar'] ?>" alt="Gambar" class="img-fluid" style="max-width: 50px;">
-                </div>
-                <div class="col-md-4">
-                  <div class="row">
-                    <h4><?php echo $muncul['nama_user'] ?></h4>
-                    <?php
-                    $bintang = $muncul['bintang']; // Ambil jumlah bintang dari database
-                    ?>
-                    <!-- Menampilkan bintang -->
-                    <div class="bintang-container">
-                      <?php
-                      for ($i = 0; $i < $bintang; $i++) {
-                        echo "&#9733;"; // Unicode karakter untuk bintang penuh
-                      }
-                      for ($i = $bintang; $i < 5; $i++) {
-                        echo "&#9734;"; // Unicode karakter untuk bintang kosong
-                      }
-                      ?>
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <?php echo $muncul['isi_komen'] ?>
-                  </div>
-
-                </div>
-              <?php } ?>
-            </div>
-          </div>
-        </div>
-    </section>
-
 
     <footer id="footer" class="footer">
       <div class="container footer-top">
@@ -623,44 +517,7 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
-    <script>
-      document.querySelectorAll('.minus-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          var quantityInput = this.nextElementSibling;
-          var currentValue = parseInt(quantityInput.value);
-          if (currentValue > 0) {
-            quantityInput.value = currentValue - 1;
-          }
-        });
-      });
 
-      document.querySelectorAll('.plus-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          var quantityInput = this.previousElementSibling;
-          var currentValue = parseInt(quantityInput.value);
-          if (currentValue >= 5) {
-            quantityInput.value = 0;
-          } else {
-            quantityInput.value = currentValue + 1;
-          }
-        });
-      });
-
-      document.getElementById('game-image').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const preview = document.getElementById('game-image-preview');
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            const icon = document.querySelector('.file-input-container i');
-            icon.style.display = 'none';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    </script>
 </body>
 
 </html>
