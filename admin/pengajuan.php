@@ -7,9 +7,15 @@ if (!isset($_SESSION['username'])) {
 }
 
 include "config.php";
-$sql = "SELECT p.*, u.user_name, u.email, pr.nama_produk FROM pengajuan as p JOIN user as u ON p.id_user = u.user_id JOIN product as pr ON p.id_produk = pr.product_id ORDER BY CASE WHEN p.status = 'pending' THEN 1 WHEN p.status = 'reject' THEN 2 ELSE 3 END, p.created_at DESC";
-
-$data = mysqli_query($Connection, $sql);
+$sql = "SELECT p.id_pengajuan, p.created_at, u.user_name, p.nama_pt, p.email_usaha, p.status,
+               GROUP_CONCAT(pd.nama_produk SEPARATOR ', ') as nama_produk,
+               GROUP_CONCAT(p.jumlah SEPARATOR ', ') as jumlah,
+               GROUP_CONCAT(p.ket SEPARATOR ', ') as deskripsi
+        FROM pengajuan p
+        JOIN user u ON p.id_user = u.user_id
+        join product as pd on p.id_produk = pd.product_id        
+        GROUP BY p.id_pengajuan";
+$result = $Connection->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -180,7 +186,10 @@ $data = mysqli_query($Connection, $sql);
                   <tbody>
                     <?php
                     $no = 1;
-                    while ($row = mysqli_fetch_array($data)) {
+                    while ($row = mysqli_fetch_array($result)) {
+                      $nama_produk = explode(", ", $row['nama_produk']);
+                      $jumlah = explode(", ", $row['jumlah']);
+                      $deskripsi = explode(", ", $row['deskripsi']);
                     ?>
                       <tr>
                         <td><?php echo $no++ ?></td>
@@ -188,9 +197,27 @@ $data = mysqli_query($Connection, $sql);
                         <td><?php echo $row['user_name'] ?></td>
                         <td><?php echo $row['nama_pt'] ?></td>
                         <td><?php echo $row['email_usaha'] ?></td>
-                        <td><?php echo $row['nama_produk'] ?></td>
-                        <td><?php echo $row['jumlah'] ?></td>
-                        <td><?php echo $row['deskripsi'] ?></td>
+                        <td>
+                          <ul class="list-unstyled">
+                            <?php foreach ($nama_produk as $index => $nama) { ?>
+                              <li><?php echo $nama; ?></li>
+                            <?php } ?>
+                          </ul>
+                        </td>
+                        <td>
+                          <ul class="list-unstyled">
+                            <?php foreach ($jumlah as $index => $jml) { ?>
+                              <li><?php echo $jml; ?></li>
+                            <?php } ?>
+                          </ul>
+                        </td>
+                        <td>
+                          <ul class="list-unstyled">
+                            <?php foreach ($deskripsi as $index => $desc) { ?>
+                              <li><?php echo $desc; ?></li>
+                            <?php } ?>
+                          </ul>
+                        </td>
                         <td>
                           <form action="update_status.php" method="post" class="status-form">
                             <input type="hidden" name="id_pengajuan" value="<?php echo htmlspecialchars($row['id_pengajuan']); ?>">

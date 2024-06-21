@@ -72,7 +72,7 @@ $data = mysqli_fetch_array($sql);
           <li><a href="projects.php">Portofolio</a></li>
           <li><a href="contact.php">Contact</a></li>
           <li>
-          <a href="login.php">Login</a>
+          <a href="login/login.php">Login</a>
           </li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>

@@ -64,7 +64,7 @@ $data = mysqli_fetch_array($sql);
               $username = $_SESSION['user_name'];
               $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
               $data = mysqli_fetch_array($sql);
-              $profilePictureUrl = 'dashboard/proccess/' . $data['gambar'];
+              $profilePictureUrl = $data['gambar'];
               echo '
               <li><a href="services_login.php">Pengajuan</a></li>
               <div class="profile">
@@ -76,7 +76,7 @@ $data = mysqli_fetch_array($sql);
                   </div>
               </div>';
             } else {
-              echo '<a href="login.php">Login</a>';
+              echo '<a href="login/login.php">Login</a>';
             }
             ?>
           </li>

@@ -1,10 +1,10 @@
 <?php
-include '../config.php';
+include '../proccess/config.php';
 
-$username = $_POST['email_user'];
-$email = $_POST['email'];
-$telp = $_POST['telp_user'];
-$password = $_POST['password_user'];
+$username = $_POST['email'];
+$email = $_POST['email_user'];
+$telp = $_POST['no_telp'];
+$password = $_POST['password'];
 
 $target_dir = "images/";
 $target_file = $target_dir . basename($_FILES["game-image"]["name"]);
@@ -26,5 +26,5 @@ if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) {
 
 mysqli_close($Connection);
 
-header("Location: ../../login.php");
+header("Location: ../login/login.php");
 exit();

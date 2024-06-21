@@ -35,23 +35,26 @@ $data = mysqli_fetch_array($sql);
   <link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/tambahan.css" rel="stylesheet" />
   <style>
-    .btn-get-ajukan {
-      color: var(--contrast-color);
-      font-family: var(--heading-font);
-      font-weight: 500;
-      font-size: 16px;
-      letter-spacing: 1px;
-      display: inline-block;
-      padding: 12px 40px;
-      border-radius: 50px;
-      transition: 0.5s;
-      margin: 10px;
-      border: 2px solid var(--accent-color);
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .btn-get-ajukan:hover {
-      background: var(--accent-color);
-      color: var(--contrast-color);
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .grow {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .grow:hover {
+      transform: scale(1.05);
     }
   </style>
 
@@ -86,7 +89,7 @@ $data = mysqli_fetch_array($sql);
               $username = $_SESSION['user_name'];
               $sql4 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
               $data4 = mysqli_fetch_array($sql4);
-              $profilePictureUrl = 'dashboard/proccess/' . $data4['gambar'];
+              $profilePictureUrl = $data4['gambar'];
               echo '
               <li><a href="services_login.php" class="active">Pengajuan</a></li>
               <div class="profile">
@@ -98,7 +101,7 @@ $data = mysqli_fetch_array($sql);
                   </div>
               </div>';
             } else {
-              echo '<a href="login.php">Login</a>';
+              echo '<a href="login/login.php">Login</a>';
             }
             ?>
           </li>
@@ -111,11 +114,11 @@ $data = mysqli_fetch_array($sql);
     <!-- Page Title -->
     <div class="page-title" data-aos="fade" style="background-image: url(assets/img/page-title-bg.jpg)">
       <div class="container position-relative">
-        <h1>Product</h1>
+        <h1>Pengajuan</h1>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.php">Home</a></li>
-            <li class="current">Product</li>
+            <li class="current">Pengajuan</li>
           </ol>
         </nav>
       </div>
@@ -124,7 +127,7 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Services Section -->
     <section id="services" class="services section">
-      <div class="container">
+      <div class="container fade-in">
         <div class="row gy-4">
           <form action="proccess/add_pengajuan.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
@@ -132,7 +135,7 @@ $data = mysqli_fetch_array($sql);
               <input class="form-control" type="text" name="nama_pt" id="nama_pt" required>
             </div>
             <div class="mb-3">
-              <label for="nama_pt">Email PT (atau pribadi)</label>
+              <label for="email_pt">Email PT (atau pribadi)</label>
               <input class="form-control" type="text" name="email_pt" id="email_pt" required>
             </div>
             <div class="mb-3">
@@ -145,17 +148,17 @@ $data = mysqli_fetch_array($sql);
                 if ($result->num_rows > 0) {
                   while ($row = $result->fetch_assoc()) {
                 ?>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-md-3">
+                    <div class="card grow mb-3">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-md-2 text-center">
                             <img src="admin/proccess/<?php echo $row['gambar']; ?>" alt="product-image" class="img-fluid" style="max-width:50px" />
                           </div>
                           <div class="col-md-3">
-                            <span><?php echo $row['nama_produk']; ?></span>
+                            <h5 class="card-title"><?php echo $row['nama_produk']; ?></h5>
                             <input type="hidden" value="<?php echo $row['product_id'] ?>" name="product_id[]">
                           </div>
-                          <div class="col-md-3">
+                          <div class="col-md-4">
                             <div class="input-group">
                               <button class="btn btn-outline-secondary minus-btn" type="button">-</button>
                               <input type="number" class="form-control quantity-input" name="quantity[]" value="0" min="0">
@@ -267,7 +270,9 @@ $data = mysqli_fetch_array($sql);
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
   <script>

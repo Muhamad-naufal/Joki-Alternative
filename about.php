@@ -65,7 +65,7 @@
             <li><a href="projects.php">Portofolio</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li>
-            <a href="login.php">Login</a></li>
+            <a href="login/login.php">Login</a></li>
             </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
