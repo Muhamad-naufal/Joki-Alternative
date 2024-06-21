@@ -1,6 +1,6 @@
 <?php
 // Correct the path and filename of the configuration file
-include '../config.php'; 
+include 'config.php'; 
 
 session_start();
 
@@ -28,7 +28,7 @@ $gambar = $userData['gambar'];
 $tanggal = $userData['created_at'];
 
 // Retrieve data from form
-$komentar = $_POST['isi'];
+$komentar = $_POST['comment'];
 $bintang = $_POST['quantity'];
 
 // Add comment to database
