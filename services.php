@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'admin/config.php';
 $sql = mysqli_query($Connection, "SELECT * FROM `product`");
 $data = mysqli_fetch_array($sql);
@@ -32,6 +33,7 @@ $data = mysqli_fetch_array($sql);
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
+  <link href="assets/css/tambahan.css" rel="stylesheet" />
   <style>
     .btn-get-ajukan {
       color: var(--contrast-color);
@@ -69,9 +71,9 @@ $data = mysqli_fetch_array($sql);
           <li>
             <?php
             if (!isset($_SESSION['user_name'])) {
-              echo '<li><a href="index.php" class="active">Home</a></li>';
+              echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
-              echo '<li><a href="services.php">Product</a></li>';
+              echo '<li><a href="services.php" class="active">Product</a></li>';
               echo '<li><a href="projects.php">Portfolio</a></li>';
               echo '<li><a href="contact.php">Contact</a></li>';
             }
@@ -80,13 +82,13 @@ $data = mysqli_fetch_array($sql);
             if (isset($_SESSION['user_name'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
               $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
-              $profilePictureUrl = $data['gambar'];
+              $sql2 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
+              $data2 = mysqli_fetch_array($sql2);
+              $profilePictureUrl = $data2['gambar'];
               echo '
-              <li><a href="index.php" class="active">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li><a href="services.php">Product</a></li>
+              <li><a href="services.php" class="active">Product</a></li>
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
@@ -137,7 +139,7 @@ $data = mysqli_fetch_array($sql);
             $words = explode(' ', $string);
             return implode(' ', array_slice($words, 0, $word_limit));
           }
-
+          
           $limited_text = limit_words($data['ket_produk'], 10);
           while ($data1 = mysqli_fetch_array($sql)) {
           ?>
