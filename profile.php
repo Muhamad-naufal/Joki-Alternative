@@ -42,6 +42,40 @@ $data = mysqli_fetch_array($syntax);
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/tambahan.css" rel="stylesheet" />
+  <link href="assets/css/profile.css" rel="stylesheet" />
+  <style>
+    /* Tambahan */
+    .file-input-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border: 2px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .file-input-container:hover {
+      border-color: #999;
+    }
+
+    .file-input-container i {
+      font-size: 50px;
+      color: #ccc;
+    }
+
+    .file-input-container input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body class="about-page">
@@ -83,6 +117,7 @@ $data = mysqli_fetch_array($syntax);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
+              <li>' . $username . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -117,31 +152,46 @@ $data = mysqli_fetch_array($syntax);
     </div>
     <!-- End Page Title -->
 
-    <!-- About Section -->
-    <section id="about" class="about section">
-      <div class="container">
-        <div class="row position-relative">
-          <div class="section-title" data-aos="fade-up">
-            <h2>Profile</h2>
-          </div>
-          <div class="col-md-6">
-            <img src="<?php echo $data['gambar']; ?>" class="img-fluid" alt="Profile Picture" />
-          </div>
-          <div class="col-md-6">
-            <div class="about-text" data-aos="fade-up">
-              <p>
-                <strong>Username:</strong> <?php echo $data['user_name']; ?>
-              </p>
-              <p>
-                <strong>Email:</strong> <?php echo $data['email']; ?>
-              </p>
-              <p>
-                <strong>Phone:</strong> <?php echo $data['no_telp']; ?>
-              </p>
+    <!-- Profile Section -->
+    <section class="vh-100" style="background-color: #f4f5f7;">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col col-lg-6 mb-4 mb-lg-0">
+            <div class="card mb-3" style="border-radius: .5rem;">
+              <div class="row g-0">
+                <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                  <img src="<?php echo $data['gambar']; ?>" style="max-width: 80px;" class="img-fluid my-5" alt="Profile Picture" />
+                  <h5><?php echo $data['user_name']; ?></h5>
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="far fa-edit mb-5" style="color: white;"></i>
+                  </a>
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body p-4">
+                    <h6>Information</h6>
+                    <hr class="mt-0 mb-4">
+                    <div class="row pt-1">
+                      <div class="col-6 mb-3">
+                        <h6>Email</h6>
+                        <p class="text-muted"><?php echo $data['email']; ?></p>
+                      </div>
+                      <div class="col-6 mb-3">
+                        <h6>Phone</h6>
+                        <p class="text-muted"><?php echo $data['no_telp']; ?></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
+    <!-- Comments Section -->
+    <section id="about" class="about section">
+      <div class="container">
         <div class="section-title" data-aos="fade-up">
           <h2>Comments</h2>
         </div>
@@ -242,6 +292,47 @@ $data = mysqli_fetch_array($syntax);
 
     </section>
     <!-- /About Section -->
+
+    <!-- Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edited Your Data</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <?php
+            include 'proccess/config.php';
+            ?>
+            <form action="update_profile.php" method="post" enctype="multipart/form-data">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="file-input-container mb-2 text-center">
+                      <input type="file" id="game-image" name="game-image">
+                      <img class="img-fluid" id="game-image-preview" src="<?php echo $data['gambar'] ?>" alt="Preview Gambar">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <input type="hidden" name="user_id" value="<?php echo $data['user_id']; ?>">
+                      <input name="username" id="username" type="text" class="form-control rounded-left mb-2" placeholder="Username" value="<?php echo $data['user_name']; ?>" required>
+                      <input name="pass" id="pass" type="password" class="form-control rounded-left mb-2" placeholder="Password" value="<?php echo $data['password']; ?>" required>
+                      <input name="email" id="email" type="text" class="form-control rounded-left mb-2" placeholder="Email" value="<?php echo $data['email']; ?>" required>
+                      <input name="no_telp" id="no_telp" type="text" class="form-control rounded-left mb-2" placeholder="No Telp" value="<?php echo $data['no_telp']; ?>" required>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
   </main>
 
   <footer id="footer" class="footer">
@@ -435,6 +526,23 @@ $data = mysqli_fetch_array($syntax);
             console.error('Error fetching comments: ' + error);
           }
         });
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById('game-image').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('game-image-preview');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          const icon = document.querySelector('.file-input-container i');
+          icon.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
       }
     });
   </script>

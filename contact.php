@@ -67,12 +67,13 @@ include 'admin/config.php';
               $data = mysqli_fetch_array($sql);
               $profilePictureUrl = $data['gambar'];
               echo '
-              <li><a href="index.php" class="active">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li><a href="services.php">Product</a></li>
               <li><a href="projects.php">Portfolio</a></li>
-              <li><a href="contact.php">Contact</a></li>
+              <li><a href="contact.php" class="active">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
+              <li>' . $username . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
