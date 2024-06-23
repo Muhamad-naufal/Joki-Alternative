@@ -103,7 +103,7 @@ $data = mysqli_fetch_array($sql);
                 integritas dan ketelitian untuk memastikan standar tertinggi
                 dari perencanaan hingga penyelesaian."
               </p>
-              <a href="https://wa.me/6281294443660" class="btn-get-started"><img src="assets/img/product/logo-whatsapp-png-images-free-download-26 1.png" alt="" srcset="" /></a>
+              <a href="https://wa.me/6281294443660" class="btn-get-started"><img src="assets/img/whatsapp.png" alt="" style="max-width: 50px;" class="img-fluid"/></a>
             </div>
           </div>
         </div>
