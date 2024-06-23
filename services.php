@@ -84,6 +84,7 @@ $data = mysqli_fetch_array($sql);
               $data = mysqli_fetch_array($sql);
               $profilePictureUrl = $data['gambar'];
               echo '
+              <li><a href="index.php" class="active">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li><a href="services.php">Product</a></li>
               <li><a href="projects.php">Portfolio</a></li>
@@ -142,7 +143,7 @@ $data = mysqli_fetch_array($sql);
           ?>
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
               <div class="service-item position-relative">
-                <img src="admin/proccess/<?php echo $data1['gambar'] ?>" class="img-fluid" />
+                <img src="admin/proccess/<?php echo $data1['gambar'] ?>" style="max-width: 200px;" class="img-fluid" />
                 <h3><?php echo $data1['nama_produk'] ?></h3>
                 <p>
                   <?php

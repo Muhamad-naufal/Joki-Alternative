@@ -90,6 +90,7 @@ $data = mysqli_fetch_array($sql);
               $data = mysqli_fetch_array($sql);
               $profilePictureUrl = $data['gambar'];
               echo '
+              <li><a href="index.php" class="active">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li><a href="services.php">Product</a></li>
               <li><a href="projects.php">Portfolio</a></li>
