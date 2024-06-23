@@ -92,7 +92,7 @@ $data = mysqli_fetch_array($sql);
           </ol>
         </nav>
         <div class="mt-3">
-          <a href="dashboard/index.php" class="btn-get-ajukan">Ajukan Penawaran</a>
+          <a href="login/login.php" class="btn-get-ajukan">Ajukan Penawaran</a>
         </div>
       </div>
     </div>
