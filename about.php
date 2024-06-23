@@ -241,7 +241,7 @@
                   <i class="bi bi-easel flex-shrink-0"></i>
                   <div>
                     <h4>VISI</h4>
-                    <p>
+                    <p style="text-align: justify;">
                       Menjadi Perusahaan Distributor Yang Handal dan dapat
                       diandalkan oleh seluruh Konsumen dalam memenuhi kebutuhan
                       Material Kontruksi
@@ -254,7 +254,7 @@
                   <i class="bi bi-patch-check flex-shrink-0"></i>
                   <div>
                     <h4>MISI</h4>
-                    <ul>
+                    <ul style="text-align: justify;">
                       <li><i></i>Menjaga Kualitas Produk yang kami Jual</li>
                       <li>
                         <i></i>Meningkatkan SDM yang bermutu dalam proses
@@ -305,8 +305,8 @@
               data-aos="fade-up"
               data-aos-delay="200"
             >
-              <h3>Kami sudah legal dan sudah mendapatkan banyak izin</h3>
-              <p>
+              <h3>Perizinan</h3>
+              <p style="text-align: justify;">
                 Kami sudah mendapatkan banyak izin dan legalitas dari pemerintah
                 untuk menjalankan bisnis ini. Kami juga sudah mendapatkan
                 sertifikat dari beberapa lembaga yang berwenang.

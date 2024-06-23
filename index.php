@@ -48,16 +48,16 @@ $data = mysqli_fetch_array($sql);
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.php" class="active">Home</a></li>
-          <?php
-          if (!isset($_SESSION['user_name'])) {
-            echo '<li><a href="about.php">About</a></li>';
-            echo '<li><a href="services.php">Product</a></li>';
-            echo '<li><a href="projects.php">Portfolio</a></li>';
-            echo '<li><a href="contact.php">Contact</a></li>';
-          }
-          ?>
           <li>
+            <?php
+            if (!isset($_SESSION['user_name'])) {
+              echo '<li><a href="index.php" class="active">Home</a></li>';
+              echo '<li><a href="about.php">About</a></li>';
+              echo '<li><a href="services.php">Product</a></li>';
+              echo '<li><a href="projects.php">Portfolio</a></li>';
+              echo '<li><a href="contact.php">Contact</a></li>';
+            }
+            ?>
             <?php
             if (isset($_SESSION['user_name'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
@@ -66,6 +66,10 @@ $data = mysqli_fetch_array($sql);
               $data = mysqli_fetch_array($sql);
               $profilePictureUrl = $data['gambar'];
               echo '
+              <li><a href="about.php">About</a></li>
+              <li><a href="services.php">Product</a></li>
+              <li><a href="projects.php">Portfolio</a></li>
+              <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
@@ -103,7 +107,7 @@ $data = mysqli_fetch_array($sql);
                 integritas dan ketelitian untuk memastikan standar tertinggi
                 dari perencanaan hingga penyelesaian."
               </p>
-              <a href="https://wa.me/6281294443660" class="btn-get-started"><img src="assets/img/whatsapp.png" alt="" style="max-width: 50px;" class="img-fluid"/></a>
+              <a href="https://wa.me/6281294443660" class="btn-get-started"><img src="assets/img/download.png" alt="" style="max-width: 150px;" class="img-fluid" /></a>
             </div>
           </div>
         </div>

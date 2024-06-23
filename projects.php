@@ -45,13 +45,41 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.php">Home</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="services.php">Product</a></li>
-          <li><a href="projects.php" class="active">Portofolio</a></li>
-          <li><a href="contact.php">Contact</a></li>
           <li>
-          <a href="login/login.php">Login</a>
+            <?php
+            if (!isset($_SESSION['user_name'])) {
+              echo '<li><a href="index.php" class="active">Home</a></li>';
+              echo '<li><a href="about.php">About</a></li>';
+              echo '<li><a href="services.php">Product</a></li>';
+              echo '<li><a href="projects.php">Portfolio</a></li>';
+              echo '<li><a href="contact.php">Contact</a></li>';
+            }
+            ?>
+            <?php
+            if (isset($_SESSION['user_name'])) {
+              // Assuming you have the user's profile picture URL stored in the session or database
+              $username = $_SESSION['user_name'];
+              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
+              $data = mysqli_fetch_array($sql);
+              $profilePictureUrl = $data['gambar'];
+              echo '
+              <li><a href="about.php">About</a></li>
+              <li><a href="services.php">Product</a></li>
+              <li><a href="projects.php">Portfolio</a></li>
+              <li><a href="contact.php">Contact</a></li>
+              <li><a href="services_login.php">Pengajuan</a></li>
+              <div class="profile">
+                  <img src="' . $profilePictureUrl . '" alt="Profile Picture">
+                  <div class="dropdown-content">
+                      <a href="profile.php">Profile</a>
+                      <a href="histori.php">History</a>
+                      <a href="proccess/logout.php">Logout</a>
+                  </div>
+              </div>';
+            } else {
+              echo '<a href="login/login.php">Login</a>';
+            }
+            ?>
           </li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
