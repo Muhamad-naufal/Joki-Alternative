@@ -1,15 +1,9 @@
 <?php
 session_start();
 include 'proccess/config.php';
-$username = $_SESSION['user_name'];
-$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
-$userData = mysqli_fetch_assoc($userQuery);
-$id_user = $userData['user_id'];
+$id = $_SESSION['user_id'];
 
-$sql = "SELECT * FROM pengajuan WHERE id_user = '$id_user' ORDER BY CASE WHEN `status` = 'pending' THEN 1 WHEN `status` = 'proccess' THEN 2 ELSE 3 END, created_at DESC";
-$result = mysqli_query($Connection, $sql);
-
-$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_name` = '$username'");
+$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_id` = '$id'");
 $data = mysqli_fetch_array($syntax);
 ?>
 
@@ -95,8 +89,8 @@ $data = mysqli_fetch_array($syntax);
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
-              echo '<li><a href="index.php" class="active">Home</a></li>';
+            if (!isset($_SESSION['user_id'])) {
+              echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
               echo '<li><a href="projects.php">Portfolio</a></li>';
@@ -104,20 +98,16 @@ $data = mysqli_fetch_array($syntax);
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
-              // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
+            if (isset($_SESSION['user_id'])) {
               $profilePictureUrl = $data['gambar'];
               echo '
-              <li><a href="index.php" class="active">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li><a href="services.php">Product</a></li>
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -189,122 +179,15 @@ $data = mysqli_fetch_array($syntax);
       </div>
     </section>
 
-    <!-- Comments Section -->
-    <section id="about" class="about section">
-      <div class="container">
-        <div class="section-title" data-aos="fade-up">
-          <h2>Comments</h2>
-        </div>
-        <form action="proccess/tambah_komen.php" method="post">
-          <div class="row">
-            <div class="col-md-6">
-              <!-- Form Komentar -->
-              <form id="commentForm" action="proccess/tambah_komen.php" method="post">
-                <input type="hidden" name="user_id" value="<?php echo $id_user; ?>">
-                <div class="form-group">
-                  <label for="quantity">Bintang</label>
-                  <div class="input-group">
-                    <button class="btn btn-outline-secondary minus-btn" type="button"><i class="bi bi-dash"></i></button>
-                    <input type="number" class="form-control quantity-input" name="quantity" value="0" min="0">
-                    <button class="btn btn-outline-secondary plus-btn" type="button"><i class="bi bi-plus"></i></button>
-                  </div>
-                </div>
-
-                <!-- Tambahkan script jQuery untuk mengatur interaksi -->
-                <script>
-                  $(document).ready(function() {
-                    // Fungsi untuk menambah nilai
-                    $('.plus-btn').click(function() {
-                      var input = $(this).siblings('.quantity-input');
-                      var currentValue = parseInt(input.val());
-                      input.val(currentValue + 1).trigger('change'); // Trigger event 'change' saat nilai berubah
-                    });
-
-                    // Fungsi untuk mengurangi nilai
-                    $('.minus-btn').click(function() {
-                      var input = $(this).siblings('.quantity-input');
-                      var currentValue = parseInt(input.val());
-                      if (currentValue > 0) {
-                        input.val(currentValue - 1).trigger('change'); // Trigger event 'change' saat nilai berubah
-                      }
-                    });
-
-                    // Animasi saat nilai input berubah
-                    $('.quantity-input').on('change', function() {
-                      $(this).animate({
-                        opacity: '0.5'
-                      }, 100, function() {
-                        $(this).animate({
-                          opacity: '1'
-                        }, 100);
-                      });
-                    });
-                  });
-                </script>
-
-                <!-- Tambahkan CSS untuk gaya tambahan -->
-                <style>
-                  .input-group {
-                    position: relative;
-                  }
-
-                  .input-group .btn {
-                    border-radius: 0;
-                  }
-
-                  .quantity-input {
-                    text-align: center;
-                  }
-
-                  .input-group .btn i {
-                    font-size: 1rem;
-                  }
-                </style>
-
-                <div class="form-group mt-3">
-                  <label for="comment"><i class="bi bi-chat-left-text"></i> Comment</label>
-                  <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Submit</button>
-              </form>
-            </div>
-            <div class="col-md-6">
-              <!-- Daftar Komentar -->
-              <div class="mb-2" style="max-height: 250px; overflow-y: auto;">
-                <div id="commentList" class="mt-4">
-                  <!-- Komentar akan dimasukkan di sini menggunakan AJAX -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-
-        <!-- Tambahkan CSS untuk desain tambahan -->
-        <style>
-          .form-group label {
-            font-weight: bold;
-          }
-
-          .btn i {
-            margin-right: 5px;
-          }
-        </style>
-
-    </section>
-    <!-- /About Section -->
-
     <!-- Modal-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Edited Your Data</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Your Data</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <?php
-            include 'proccess/config.php';
-            ?>
             <form action="update_profile.php" method="post" enctype="multipart/form-data">
               <div class="container">
                 <div class="row">
@@ -317,22 +200,24 @@ $data = mysqli_fetch_array($syntax);
                   <div class="col-md-6">
                     <div class="form-group">
                       <input type="hidden" name="user_id" value="<?php echo $data['user_id']; ?>">
-                      <input name="username" id="username" type="text" class="form-control rounded-left mb-2" placeholder="Username" value="<?php echo $data['user_name']; ?>" required>
-                      <input name="pass" id="pass" type="password" class="form-control rounded-left mb-2" placeholder="Password" value="<?php echo $data['password']; ?>" required>
-                      <input name="email" id="email" type="text" class="form-control rounded-left mb-2" placeholder="Email" value="<?php echo $data['email']; ?>" required>
-                      <input name="no_telp" id="no_telp" type="text" class="form-control rounded-left mb-2" placeholder="No Telp" value="<?php echo $data['no_telp']; ?>" required>
+                      <input name="username" id="username" type="text" class="form-control rounded-left mb-2" placeholder="Username" value="<?php echo $data['user_name']; ?>">
+                      <input name="email" id="email" type="text" class="form-control rounded-left mb-2" placeholder="Email" value="<?php echo $data['email']; ?>">
+                      <input name="no_telp" id="no_telp" type="text" class="form-control rounded-left mb-2" placeholder="No Telp" value="<?php echo $data['no_telp']; ?>">
+                      <input name="new_password" id="new_password" type="password" class="form-control rounded-left mb-2" value="<?php echo $data['password']; ?>" placeholder="New Password">
                     </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                   </div>
+                </div>
+              </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-    </div>
+
   </main>
 
   <footer id="footer" class="footer">
@@ -408,127 +293,6 @@ $data = mysqli_fetch_array($syntax);
   <!-- jQuery dan Bootstrap Icons (untuk ikona) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
-  <script>
-    $(document).ready(function() {
-      // Function untuk menampilkan semua komentar saat halaman dimuat
-      fetchComments();
-
-      // Event listener untuk form komentar
-      $('#commentForm').submit(function(event) {
-        event.preventDefault(); // Menghentikan pengiriman form secara default
-
-        // Mengambil data form
-        var formData = $(this).serialize();
-
-        // Kirim data ke server menggunakan AJAX
-        $.ajax({
-          type: 'POST',
-          url: $(this).attr('action'),
-          data: formData,
-          success: function(response) {
-            // Tampilkan pesan sukses (opsional)
-            alert('Comment submitted successfully');
-
-            // Kosongkan textarea setelah submit
-            $('#comment').val('');
-
-            // Memanggil kembali fungsi untuk menampilkan semua komentar
-            fetchComments();
-          },
-          error: function(xhr, status, error) {
-            // Tampilkan pesan error (opsional)
-            alert('Error submitting comment: ' + xhr.responseText);
-          }
-        });
-      });
-
-      // Function untuk mengambil dan menampilkan semua komentar dari server
-      function fetchComments() {
-        $.ajax({
-          url: 'proccess/get_komen.php', // Ganti dengan file PHP yang mengambil komentar dari database
-          type: 'GET',
-          success: function(response) {
-            $('#commentList').html(response); // Menampilkan komentar di dalam div #commentList
-          },
-          error: function(xhr, status, error) {
-            // Tampilkan pesan error jika gagal mengambil komentar (opsional)
-            console.error('Error fetching comments: ' + error);
-          }
-        });
-      }
-    });
-  </script>
-
-  <!-- Script JavaScript untuk menangani interaksi tombol + dan - -->
-  <script>
-    $(document).ready(function() {
-      // Mengatur nilai awal quantity pada load halaman
-      var quantity = 0;
-
-      // Tombol plus
-      $('.plus-btn').click(function() {
-        quantity++;
-        $('.quantity-input').val(quantity);
-      });
-
-      // Tombol minus
-      $('.minus-btn').click(function() {
-        if (quantity > 0) {
-          quantity--;
-          $('.quantity-input').val(quantity);
-        }
-      });
-
-      // Submit form menggunakan AJAX
-      $('#commentForm').submit(function(event) {
-        event.preventDefault(); // Menghentikan pengiriman form secara default
-
-        // Mengambil data form
-        var formData = $(this).serialize();
-
-        // Kirim data ke server menggunakan AJAX
-        $.ajax({
-          type: 'POST',
-          url: $(this).attr('action'),
-          data: formData,
-          success: function(response) {
-            // Tampilkan pesan sukses (opsional)
-            alert('Comment submitted successfully');
-
-            // Kosongkan textarea setelah submit
-            $('#comment').val('');
-
-            // Reset nilai quantity ke 0
-            quantity = 0;
-            $('.quantity-input').val(quantity);
-
-            // Memanggil kembali fungsi untuk menampilkan semua komentar
-            fetchComments();
-          },
-          error: function(xhr, status, error) {
-            // Tampilkan pesan error (opsional)
-            alert('Error submitting comment: ' + xhr.responseText);
-          }
-        });
-      });
-
-      // Function untuk mengambil dan menampilkan semua komentar dari server
-      function fetchComments() {
-        $.ajax({
-          url: 'proccess/get_komen.php', // Ganti dengan file PHP yang mengambil komentar dari database
-          type: 'GET',
-          success: function(response) {
-            $('#commentList').html(response); // Menampilkan komentar di dalam div #commentList
-          },
-          error: function(xhr, status, error) {
-            // Tampilkan pesan error jika gagal mengambil komentar (opsional)
-            console.error('Error fetching comments: ' + error);
-          }
-        });
-      }
-    });
-  </script>
 
   <script>
     document.getElementById('game-image').addEventListener('change', function(event) {

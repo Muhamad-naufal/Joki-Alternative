@@ -1,6 +1,11 @@
 <?php
 session_start();
 include 'admin/config.php';
+if (isset($_SESSION['user_id'])) {
+  $id = $_SESSION['user_id'];
+  $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = '$id'");
+  $data = mysqli_fetch_array($sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +56,7 @@ include 'admin/config.php';
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
@@ -60,11 +65,7 @@ include 'admin/config.php';
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
-              // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
+            if (isset($_SESSION['user_id'])) {
               $profilePictureUrl = $data['gambar'];
               echo '
               <li><a href="index.php">Home</a></li>
@@ -73,7 +74,7 @@ include 'admin/config.php';
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php" class="active">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">

@@ -1,6 +1,12 @@
 <?php
 session_start();
 include 'proccess/config.php';
+
+if (isset($_SESSION['user_id'])) {
+  $sql1 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = $_SESSION[user_id]");
+  $data1 = mysqli_fetch_array($sql1);
+}
+
 $sql = mysqli_query($Connection, "SELECT * FROM `product`");
 $data = mysqli_fetch_array($sql);
 ?>
@@ -74,7 +80,7 @@ $data = mysqli_fetch_array($sql);
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
@@ -83,12 +89,9 @@ $data = mysqli_fetch_array($sql);
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
+            if (isset($_SESSION['user_id'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
-              $profilePictureUrl = $data['gambar'];
+              $profilePictureUrl = $data1['gambar'];
               echo '
               <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
@@ -96,7 +99,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php" class="active">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data1['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">

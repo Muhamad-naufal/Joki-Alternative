@@ -23,7 +23,7 @@
 						<div class="icon d-flex align-items-center justify-content-center">
 							<span class="fa fa-user-o"></span>
 						</div>
-						<a href="../register/register.php"><h3 class="text-center mb-4">Have an account?</h3></a>
+						<a href="../register.php"><h3 class="text-center mb-4">Have an account?</h3></a>
 						<form method="post" action="../proccess/login.php" class="login-form">
 							<div class="form-group">
 								<input name="email" id="email" type="text" class="form-control rounded-left" placeholder="Username" required>

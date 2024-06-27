@@ -1,6 +1,12 @@
 <?php
 session_start();
 include 'admin/config.php';
+
+if (isset($_SESSION['user_id'])) {
+  $sql1 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = $_SESSION[user_id]");
+  $data1 = mysqli_fetch_array($sql1);
+}
+
 $sql = mysqli_query($Connection, "SELECT * FROM `product`");
 $data = mysqli_fetch_array($sql);
 ?>
@@ -70,7 +76,7 @@ $data = mysqli_fetch_array($sql);
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php" class="active">Product</a></li>';
@@ -79,12 +85,9 @@ $data = mysqli_fetch_array($sql);
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
+            if (isset($_SESSION['user_id'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql2 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data2 = mysqli_fetch_array($sql2);
-              $profilePictureUrl = $data2['gambar'];
+              $profilePictureUrl = $data1['gambar'];
               echo '
               <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
@@ -92,7 +95,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data1['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -140,11 +143,11 @@ $data = mysqli_fetch_array($sql);
             $words = explode(' ', $string);
             return implode(' ', array_slice($words, 0, $word_limit));
           }
-          
+
           $limited_text = limit_words($data['ket_produk'], 10);
           while ($data1 = mysqli_fetch_array($sql)) {
           ?>
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-4 col-md-3" data-aos="fade-up" data-aos-delay="100">
               <div class="service-item position-relative">
                 <img src="admin/proccess/<?php echo $data1['gambar'] ?>" style="max-width: 200px;" class="img-fluid" />
                 <h3><?php echo $data1['nama_produk'] ?></h3>

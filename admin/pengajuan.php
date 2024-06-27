@@ -7,15 +7,14 @@ if (!isset($_SESSION['username'])) {
 }
 
 include "config.php";
-$sql = "SELECT p.id_pengajuan, p.created_at, u.user_name, p.nama_pt, p.email_usaha, p.status,
-               GROUP_CONCAT(pd.nama_produk SEPARATOR ', ') as nama_produk,
-               GROUP_CONCAT(p.jumlah SEPARATOR ', ') as jumlah,
-               GROUP_CONCAT(p.ket SEPARATOR ', ') as deskripsi
+$sql = "SELECT p.id_pengajuan, p.created_at, u.user_name, p.nama_pt, p.email_usaha, p.status, p.deskripsi, pd.nama_produk, p.jumlah
         FROM pengajuan p
         JOIN user u ON p.id_user = u.user_id
-        join product as pd on p.id_produk = pd.product_id        
-        GROUP BY p.id_pengajuan";
+        JOIN product pd ON p.id_produk = pd.product_id
+        ORDER BY p.created_at DESC, p.nama_pt, p.id_pengajuan";
 $result = $Connection->query($sql);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -157,99 +156,88 @@ $result = $Connection->query($sql);
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Tanggal</th>
-                      <th>Nama User</th>
-                      <th>Nama PT</th>
-                      <th>Email PT</th>
-                      <th>Nama Barang</th>
-                      <th>Jumlah</th>
-                      <th>Keterangan</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th>No</th>
-                      <th>Tanggal</th>
-                      <th>Nama User</th>
-                      <th>Nama PT</th>
-                      <th>Email PT</th>
-                      <th>Nama Barang</th>
-                      <th>Jumlah</th>
-                      <th>Keterangan</th>
-                      <th>Status</th>
-                    </tr>
-                  </tfoot>
                   <tbody>
                     <?php
                     $no = 1;
+                    $currentDate = '';
+                    $currentPT = '';
+
+                    function formatTanggal($dateTime)
+                    {
+                      setlocale(LC_TIME, 'id_ID');
+                      $timestamp = strtotime($dateTime);
+                      return strftime('%d %B %Y, pukul %H:%M WIB', $timestamp);
+                    }
+
                     while ($row = mysqli_fetch_array($result)) {
-                      $nama_produk = explode(", ", $row['nama_produk']);
-                      $jumlah = explode(", ", $row['jumlah']);
-                      $deskripsi = explode(", ", $row['deskripsi']);
+                      $createdAt = $row['created_at'];
+                      $namaPT = $row['nama_pt'];
+                      $emailPT = $row['email_usaha'];
+
+                      // Group by created_at
+                      if ($createdAt != $currentDate) {
+                        if ($currentDate != '') {
+                          echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
+                          echo "</tr></tbody></table>";
+                        }
+                        echo "<h4>Pengajuan Pada: " . formatTanggal($createdAt) . "</h4>";
+                        echo "<h6>Nama PT: " . $namaPT . "</h6>";
+                        echo "<h6>Email PT: <a href='mailto:" . $emailPT . "'>" . $emailPT . "</a></h6>";
+                        echo "<table id='table_" . str_replace(' ', '_', $namaPT) . "' class='table table-bordered' width='100%' cellspacing='0'>";
+                        echo "<thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th></tr></thead>";
+                        echo "<tbody>";
+                        $currentDate = $createdAt;
+                        $currentPT = $namaPT;
+                      }
+
+                      // Group by nama_pt
+                      if ($namaPT != $currentPT) {
+                        if ($currentPT != '') {
+                          echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
+                          echo "</tr></tbody></table>";
+                        }
+                        echo "<tr><td colspan='10'><h4>Pengajuan Pada: " . formatTanggal($createdAt) . "</h4></td></tr>";
+                        echo "<tr><td colspan='10'><h6>Nama PT: " . $namaPT . "</h6></td></tr>";
+                        echo "<tr><td colspan='10'><h6>Email PT: <a href='mailto:" . $emailPT . "'>" . $emailPT . "</a></h6></td></tr>";
+                        echo "<table id='table_" . str_replace(' ', '_', $namaPT) . "' class='table table-bordered' width='100%' cellspacing='0'>";
+                        echo "<thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th><th>Status</th><th>Print</th></tr></thead>";
+                        echo "<tbody>";
+                        $currentPT = $namaPT;
+                      }
                     ?>
                       <tr>
-                        <td><?php echo $no++ ?></td>
-                        <td><?php echo $row['created_at'] ?></td>
-                        <td><?php echo $row['user_name'] ?></td>
-                        <td><?php echo $row['nama_pt'] ?></td>
-                        <td><?php echo $row['email_usaha'] ?></td>
-                        <td>
-                          <ul class="list-unstyled">
-                            <?php foreach ($nama_produk as $index => $nama) { ?>
-                              <li><?php echo $nama; ?></li>
-                            <?php } ?>
-                          </ul>
-                        </td>
-                        <td>
-                          <ul class="list-unstyled">
-                            <?php foreach ($jumlah as $index => $jml) { ?>
-                              <li><?php echo $jml; ?></li>
-                            <?php } ?>
-                          </ul>
-                        </td>
-                        <td>
-                          <ul class="list-unstyled">
-                            <?php foreach ($deskripsi as $index => $desc) { ?>
-                              <li><?php echo $desc; ?></li>
-                            <?php } ?>
-                          </ul>
-                        </td>
-                        <td>
-                          <form action="update_status.php" method="post" class="status-form">
-                            <input type="hidden" name="id_pengajuan" value="<?php echo htmlspecialchars($row['id_pengajuan']); ?>">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <?php echo ucfirst($row['status']); ?>
-                              </button>
-                              <div class="dropdown-menu">
-                                <button class="dropdown-item" type="submit" name="status" value="pending" <?php if ($row['status'] == 'pending') echo 'selected'; ?>>Pending</button>
-                                <button class="dropdown-item" type="submit" name="status" value="accept" <?php if ($row['status'] == 'accept') echo 'selected'; ?>>Accept</button>
-                                <button class="dropdown-item" type="submit" name="status" value="process" <?php if ($row['status'] == 'process') echo 'selected'; ?>>Process</button>
-                              </div>
-                            </div>
-                          </form>
-                        </td>
+                        <td><?php echo $no++; ?></td>
+                        <td><?php echo $row['nama_produk']; ?></td>
+                        <td><?php echo $row['jumlah']; ?></td>
+                        <td><?php echo $row['deskripsi']; ?></td>
                       </tr>
                     <?php
+                    }
+                    // Print button for the last group
+                    if ($currentPT != '') {
+                      echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
+                      echo "</tr></tbody></table>";
                     }
                     ?>
                   </tbody>
                 </table>
+                <script>
+                  function printTableRow(button) {
+                    var table = $(button).closest('table');
+                    var tableId = table.attr('id');
+                    printTable(tableId);
+                  }
+
+                  function printTable(tableId) {
+                    var printContents = document.getElementById(tableId).outerHTML;
+                    var originalContents = document.body.innerHTML;
+                    document.body.innerHTML = printContents;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                  }
+                </script>
               </div>
             </div>
-
-            <script>
-              document.querySelectorAll('.status-dropdown').forEach(function(element) {
-                element.addEventListener('change', function() {
-                  this.closest('form').submit();
-                });
-              });
-            </script>
-
           </div>
         </div>
         <!-- /.container-fluid -->

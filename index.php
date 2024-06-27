@@ -1,6 +1,12 @@
 <?php
 session_start();
 include 'proccess/config.php';
+
+if (isset($_SESSION['user_id'])) {
+  $sql1 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = $_SESSION[user_id]");
+  $data1 = mysqli_fetch_array($sql1);
+}
+
 $sql = mysqli_query($Connection, "SELECT * FROM komentar");
 $data = mysqli_fetch_array($sql);
 ?>
@@ -33,6 +39,64 @@ $data = mysqli_fetch_array($sql);
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/tambahan.css" rel="stylesheet" />
+  <style>
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .star-rating input[type="radio"] {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 2rem;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover~label,
+    .star-rating input[type="radio"]:checked~label {
+      color: #f5c518;
+    }
+
+    .input-group .btn {
+      border-radius: 0;
+    }
+
+    .quantity-input {
+      text-align: center;
+      max-width: 60px;
+    }
+
+    .btn i {
+      margin-right: 5px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    #commentList {
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .section-title h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .about.section {
+      padding: 60px 0;
+    }
+  </style>
 </head>
 
 <body class="index-page">
@@ -50,7 +114,7 @@ $data = mysqli_fetch_array($sql);
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php" class="active">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
@@ -59,12 +123,9 @@ $data = mysqli_fetch_array($sql);
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
+            if (isset($_SESSION['user_id'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
-              $profilePictureUrl = $data['gambar'];
+              $profilePictureUrl = $data1['gambar'];
               echo '
               <li><a href="index.php" class="active">Home</a></li>
               <li><a href="about.php">About</a></li>
@@ -72,7 +133,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data1['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -341,6 +402,90 @@ $data = mysqli_fetch_array($sql);
     </section>
     <!-- /Alt Services Section -->
 
+    <!-- Comments Section -->
+    <?php
+    if (isset($_SESSION['user_id'])) {
+    ?>
+      <!-- Comments Section -->
+      <section id="about" class="about section">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>Comments</h2>
+          </div>
+          <form action="proccess/tambah_komen.php" method="post">
+            <div class="row">
+              <div class="col-md-6">
+                <!-- Form Komentar -->
+                <form id="commentForm" action="proccess/tambah_komen.php" method="post">
+                  <input type="hidden" name="user_id" value="<?php echo $id; ?>">
+                  <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                  </div>
+
+                  <!-- Tambahkan script jQuery untuk mengatur interaksi -->
+                  <script>
+                    $(document).ready(function() {
+                      // Logika untuk menangani klik pada label bintang
+                      $('.star-rating label').click(function() {
+                        var rating = $(this).prev('input').val();
+                        $(this).parent().find('input').prop('checked', false);
+                        $(this).prev('input').prop('checked', true);
+                      });
+                    });
+                  </script>
+
+                  <div class="form-group mt-3">
+                    <label for="comment"><i class="bi bi-chat-left-text"></i> Comment</label>
+                    <input type="hidden" name="user" id="user" value="<?php echo $data1['user_name'] ?>">
+                    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Submit</button>
+                </form>
+              </div>
+              <div class="col-md-6">
+                <!-- Daftar Komentar -->
+                <div class="mb-2" style="max-height: 250px; overflow-y: auto;">
+                  <div id="commentList" class="mt-4">
+                    <!-- Komentar akan dimasukkan di sini menggunakan AJAX -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Tambahkan CSS untuk desain tambahan -->
+          <style>
+            .form-group label {
+              font-weight: bold;
+            }
+
+            .btn i {
+              margin-right: 5px;
+            }
+          </style>
+      </section>
+      <!-- Comments Section -->
+    <?php
+    } else {
+      echo '<section id="about" class="about section">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>Comments</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <p>Anda harus login terlebih dahulu untuk memberikan komentar.</p>
+          </div>
+        </div>
+      </div>
+    </section>';
+    }
+    ?>
+
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section">
       <!-- Section Title -->
@@ -389,7 +534,7 @@ $data = mysqli_fetch_array($sql);
               <div class="swiper-slide">
                 <div class="testimonial-wrap">
                   <div class="testimonial-item">
-                    <img src="dashboard/proccess/<?php echo $data['gambar'] ?>" class="testimonial-img" alt="" />
+                    <img src="<?php echo $data['gambar'] ?>" class="testimonial-img" alt="" />
                     <h3><?php echo $data['nama_user'] ?></h3>
                     <h4><?php
                         // Asumsikan $data['created_at'] adalah timestamp yang valid
@@ -523,6 +668,130 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <script>
+      $(document).ready(function() {
+        // Function untuk menampilkan semua komentar saat halaman dimuat
+        fetchComments();
+
+        // Event listener untuk form komentar
+        $('#commentForm').submit(function(event) {
+          event.preventDefault(); // Menghentikan pengiriman form secara default
+
+          // Mengambil data form
+          var formData = $(this).serialize();
+
+          // Kirim data ke server menggunakan AJAX
+          $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function(response) {
+              // Tampilkan pesan sukses (opsional)
+              alert('Comment submitted successfully');
+
+              // Kosongkan textarea setelah submit
+              $('#comment').val('');
+
+              // Memanggil kembali fungsi untuk menampilkan semua komentar
+              fetchComments();
+            },
+            error: function(xhr, status, error) {
+              // Tampilkan pesan error (opsional)
+              alert('Error submitting comment: ' + xhr.responseText);
+            }
+          });
+        });
+
+        // Function untuk mengambil dan menampilkan semua komentar dari server
+        function fetchComments() {
+          $.ajax({
+            url: 'proccess/get_komen.php', // Ganti dengan file PHP yang mengambil komentar dari database
+            type: 'GET',
+            success: function(response) {
+              $('#commentList').html(response); // Menampilkan komentar di dalam div #commentList
+            },
+            error: function(xhr, status, error) {
+              // Tampilkan pesan error jika gagal mengambil komentar (opsional)
+              console.error('Error fetching comments: ' + error);
+            }
+          });
+        }
+      });
+    </script>
+
+    <!-- Script JavaScript untuk menangani interaksi tombol + dan - -->
+    <script>
+      $(document).ready(function() {
+        // Mengatur nilai awal quantity pada load halaman
+        var quantity = 0;
+
+        // Tombol plus
+        $('.plus-btn').click(function() {
+          quantity++;
+          $('.quantity-input').val(quantity);
+        });
+
+        // Tombol minus
+        $('.minus-btn').click(function() {
+          if (quantity > 0) {
+            quantity--;
+            $('.quantity-input').val(quantity);
+          }
+        });
+
+        // Submit form menggunakan AJAX
+        $('#commentForm').submit(function(event) {
+          event.preventDefault(); // Menghentikan pengiriman form secara default
+
+          // Mengambil data form
+          var formData = $(this).serialize();
+
+          // Kirim data ke server menggunakan AJAX
+          $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function(response) {
+              // Tampilkan pesan sukses (opsional)
+              alert('Comment submitted successfully');
+
+              // Kosongkan textarea setelah submit
+              $('#comment').val('');
+
+              // Reset nilai quantity ke 0
+              quantity = 0;
+              $('.quantity-input').val(quantity);
+
+              // Memanggil kembali fungsi untuk menampilkan semua komentar
+              fetchComments();
+            },
+            error: function(xhr, status, error) {
+              // Tampilkan pesan error (opsional)
+              alert('Error submitting comment: ' + xhr.responseText);
+            }
+          });
+        });
+
+        // Function untuk mengambil dan menampilkan semua komentar dari server
+        function fetchComments() {
+          $.ajax({
+            url: 'proccess/get_komen.php', // Ganti dengan file PHP yang mengambil komentar dari database
+            type: 'GET',
+            success: function(response) {
+              $('#commentList').html(response); // Menampilkan komentar di dalam div #commentList
+            },
+            error: function(xhr, status, error) {
+              // Tampilkan pesan error jika gagal mengambil komentar (opsional)
+              console.error('Error fetching comments: ' + error);
+            }
+          });
+        }
+      });
+    </script>
+
 
 </body>
 

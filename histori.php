@@ -1,16 +1,12 @@
 <?php
 session_start();
 include 'proccess/config.php';
-$username = $_SESSION['user_name'];
-$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
-$userData = mysqli_fetch_assoc($userQuery);
-$id_user = $userData['user_id'];
+$id = $_SESSION['user_id'];
+$sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = '$id'");
+$data = mysqli_fetch_array($sql);
 
-$sql = "SELECT * FROM pengajuan WHERE id_user = '$id_user' ORDER BY CASE WHEN `status` = 'pending' THEN 1 WHEN `status` = 'proccess' THEN 2 ELSE 3 END, created_at DESC";
-$result = mysqli_query($Connection, $sql);
-
-$syntax = mysqli_query($Connection, "SELECT * FROM `user` where `user_name` = '$username'");
-$data = mysqli_fetch_array($syntax);
+$sql1 = "SELECT * FROM pengajuan WHERE id_user = '$id' ORDER BY CASE WHEN `status` = 'pending' THEN 1 WHEN `status` = 'proccess' THEN 2 ELSE 3 END, created_at DESC";
+$result = mysqli_query($Connection, $sql1);
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +57,7 @@ $data = mysqli_fetch_array($syntax);
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php" class="active">Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
@@ -70,11 +66,7 @@ $data = mysqli_fetch_array($syntax);
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
-              // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
+            if (isset($_SESSION['user_id'])) {
               $profilePictureUrl = $data['gambar'];
               echo '
               <li><a href="index.php" class="active">Home</a></li>
@@ -83,7 +75,7 @@ $data = mysqli_fetch_array($syntax);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -131,7 +123,6 @@ $data = mysqli_fetch_array($syntax);
                   <th>Nama Barang</th>
                   <th>Jumlah</th>
                   <th>Ket Penawaran</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tfoot>
@@ -141,7 +132,6 @@ $data = mysqli_fetch_array($syntax);
                   <th>Nama Barang</th>
                   <th>Jumlah</th>
                   <th>Ket Penawaran</th>
-                  <th>Status</th>
                 </tr>
               </tfoot>
               <tbody>
@@ -159,7 +149,6 @@ $data = mysqli_fetch_array($syntax);
                     <td><?php echo $product_name ?></td>
                     <td><?php echo $row['jumlah'] ?></td>
                     <td><?php echo $row['deskripsi'] ?></td>
-                    <td><?php echo $row['status'] ?></td>
                   </tr>
                 <?php
                 }

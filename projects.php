@@ -1,6 +1,13 @@
 <?php
 session_start();
 include 'admin/config.php';
+
+if (isset($_SESSION['user_id'])) {
+  $id = $_SESSION['user_id'];
+  $sql1 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = '$id'");
+  $data1 = mysqli_fetch_array($sql1);
+}
+
 $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
 ?>
 
@@ -49,8 +56,8 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
-              echo '<li><a href="index.php">Home</a></li>';
+            if (!isset($_SESSION['user_id'])) {
+              echo '<li><a href="index.php" >Home</a></li>';
               echo '<li><a href="about.php">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
               echo '<li><a href="projects.php" class="active">Portfolio</a></li>';
@@ -58,12 +65,9 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
+            if (isset($_SESSION['user_id'])) {
               // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql2 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data2 = mysqli_fetch_array($sql2);
-              $profilePictureUrl = $data2['gambar'];
+              $profilePictureUrl = $data1['gambar'];
               echo '
               <li><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
@@ -71,7 +75,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
               <li><a href="projects.php" class="active">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data1['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">

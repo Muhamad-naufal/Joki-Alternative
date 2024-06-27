@@ -1,23 +1,33 @@
 <?php
 include 'proccess/config.php';
-session_start();
-$id = $_POST['user_id'];
-$email = $_POST['email'];
-$username = $_POST['username'];
-$no_telp = $_POST['no_telp'];
-$password = $_POST['pass'];
+date_default_timezone_set('Asia/Jakarta');
 
-// Upload Proses
-$target_dir = "images/"; // path directory image akan di simpan
-$target_file = $target_dir . basename($_FILES["game-image"]["name"]); // full path dari image yg akan di simpan
-if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) { // fungsi ini utk memindahkan file dr tempat asal ke target_file
-    echo "The file " . htmlspecialchars(basename($_FILES["game-image"]["name"])) . " has been uploaded.<br>";
-    $result = mysqli_query($Connection, "UPDATE `user` set `user_name` = '$username', `gambar` = '$target_file', `email` = '$email', `no_telp` = '$no_telp', `password` = '$password' WHERE `user_id` = '$id'");
+$user_id = $_POST['user_id'];
+$username = $_POST['username'];
+$email = $_POST['email'];
+$telp = $_POST['no_telp'];
+$new_password = $_POST['new_password'];
+
+$target_dir = "images/";
+$target_file = $target_dir . basename($_FILES["game-image"]["name"]);
+
+if ($_FILES["game-image"]["error"] == UPLOAD_ERR_OK) {
+    if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) {
+        echo "The file " . htmlspecialchars(basename($_FILES["game-image"]["name"])) . " has been uploaded.<br>";
+
+        $sql = "UPDATE `user` SET `user_name` = '$username', `gambar` = '$target_file', `email` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
+    } else {
+        echo "Sorry, there was an error uploading your file.<br>";
+    }
 } else {
-    echo "Sorry, there was an error uploading your file.<br>";
+    $sql = "UPDATE `user` SET `user_name` = '$username', `email` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
 }
 
-$result = mysqli_query($Connection, "UPDATE `user` set `user_name` = '$username', `email` = '$email', `no_telp` = '$no_telp', `password` = '$password' WHERE `user_id` = '$id'");
+if (mysqli_query($Connection, $sql)) {
+    echo "Record updated successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($Connection);
+}
 
-header('location:login/login.php');
-?>
+header("Location: profile.php");
+exit();

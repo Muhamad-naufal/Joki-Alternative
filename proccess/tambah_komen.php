@@ -15,8 +15,8 @@ if ($Connection->connect_error) {
     die("Connection failed: " . $Connection->connect_error);
 }
 
-$username = $_SESSION['user_name'];
-$userQuery = $Connection->query("SELECT gambar, created_at FROM `user` WHERE `user_name` = '$username'");
+$id = $_SESSION['user_id'];
+$userQuery = $Connection->query("SELECT gambar, created_at FROM `user` WHERE `user_id` = '$id'");
 
 if (!$userQuery) {
     die("Query failed: " . $Connection->error);
@@ -28,8 +28,9 @@ $gambar = $userData['gambar'];
 $tanggal = $userData['created_at'];
 
 // Retrieve data from form
+$username = $_POST['user'];
 $komentar = $_POST['comment'];
-$bintang = $_POST['quantity'];
+$bintang = $_POST['rating'];
 
 // Add comment to database
 $sql = "INSERT INTO `komentar`(`id_komen`, `nama_user`, `gambar`, `bintang`, `isi_komen`, `created_at`) VALUES (NULL, '$username', '$gambar', '$bintang', '$komentar', current_timestamp())";

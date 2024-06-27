@@ -1,5 +1,5 @@
 <?php
-include '../proccess/config.php';
+include 'proccess/config.php';
 
 $username = $_POST['email'];
 $email = $_POST['email_user'];
@@ -26,5 +26,6 @@ if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) {
 
 mysqli_close($Connection);
 
-header("Location: ../login/login.php");
+header("Location: login/login.php");
 exit();
+?>

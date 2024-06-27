@@ -1,6 +1,11 @@
 <?php
 session_start();
 include('proccess/config.php');
+if (isset($_SESSION['user_id'])) {
+  $id = $_SESSION['user_id'];
+  $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = '$id'");
+  $data = mysqli_fetch_array($sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +56,7 @@ include('proccess/config.php');
         <ul>
           <li>
             <?php
-            if (!isset($_SESSION['user_name'])) {
+            if (!isset($_SESSION['user_id'])) {
               echo '<li><a href="index.php">Home</a></li>';
               echo '<li><a href="about.php" class="active">About</a></li>';
               echo '<li><a href="services.php">Product</a></li>';
@@ -60,11 +65,7 @@ include('proccess/config.php');
             }
             ?>
             <?php
-            if (isset($_SESSION['user_name'])) {
-              // Assuming you have the user's profile picture URL stored in the session or database
-              $username = $_SESSION['user_name'];
-              $sql = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_name` = '$username'");
-              $data = mysqli_fetch_array($sql);
+            if (isset($_SESSION['user_id'])) {
               $profilePictureUrl = $data['gambar'];
               echo '
               <li><a href="index.php">Home</a></li>
@@ -73,7 +74,7 @@ include('proccess/config.php');
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $username . '</li>
+              <li>' . $data['user_name'] . '</li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -462,115 +463,71 @@ include('proccess/config.php');
               }
             }
           </script>
+
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="testimonial-wrap">
-                <div class="testimonial-item">
-                  <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="" />
-                  <h3>Saul Goodman</h3>
-                  <h4>Ceo &amp; Founder</h4>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  </div>
-                  <p>
-                    <i class="bi bi-quote quote-icon-left"></i>
-                    <span>Proin iaculis purus consequat sem cure digni ssim donec
-                      porttitora entum suscipit rhoncus. Accusantium quam,
-                      ultricies eget id, aliquam eget nibh et. Maecen aliquam,
-                      risus at semper.</span>
-                    <i class="bi bi-quote quote-icon-right"></i>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- End testimonial item -->
+            <?php
+            $sql = mysqli_query($Connection, "SELECT * FROM komentar ORDER BY created_at DESC LIMIT 5");
+            while ($data = mysqli_fetch_array($sql)) {
+            ?>
+              <div class="swiper-slide">
+                <div class="testimonial-wrap">
+                  <div class="testimonial-item">
+                    <img src="<?php echo $data['gambar'] ?>" class="testimonial-img" alt="" />
+                    <h3><?php echo $data['nama_user'] ?></h3>
+                    <h4><?php
+                        // Asumsikan $data['created_at'] adalah timestamp yang valid
+                        $timestamp = strtotime($data['created_at']);
+                        $formatted_date = date('d F Y, H:i', $timestamp);
 
-            <div class="swiper-slide">
-              <div class="testimonial-wrap">
-                <div class="testimonial-item">
-                  <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="" />
-                  <h3>Sara Wilsson</h3>
-                  <h4>Designer</h4>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  </div>
-                  <p>
-                    <i class="bi bi-quote quote-icon-left"></i>
-                    <span>Export tempor illum tamen malis malis eram quae irure
-                      esse labore quem cillum quid cillum eram malis quorum
-                      velit fore eram velit sunt aliqua noster fugiat irure
-                      amet legam anim culpa.</span>
-                    <i class="bi bi-quote quote-icon-right"></i>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- End testimonial item -->
+                        // Mengubah nama bulan ke bahasa Indonesia
+                        $bulan = array(
+                          'January' => 'Januari',
+                          'February' => 'Februari',
+                          'March' => 'Maret',
+                          'April' => 'April',
+                          'May' => 'Mei',
+                          'June' => 'Juni',
+                          'July' => 'Juli',
+                          'August' => 'Agustus',
+                          'September' => 'September',
+                          'October' => 'Oktober',
+                          'November' => 'November',
+                          'December' => 'Desember'
+                        );
 
-            <div class="swiper-slide">
-              <div class="testimonial-wrap">
-                <div class="testimonial-item">
-                  <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="" />
-                  <h3>Jena Karlis</h3>
-                  <h4>Store Owner</h4>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  </div>
-                  <p>
-                    <i class="bi bi-quote quote-icon-left"></i>
-                    <span>Enim nisi quem export duis labore cillum quae magna
-                      enim sint quorum nulla quem veniam duis minim tempor
-                      labore quem eram duis noster aute amet eram fore quis
-                      sint minim.</span>
-                    <i class="bi bi-quote quote-icon-right"></i>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- End testimonial item -->
+                        foreach ($bulan as $en => $id) {
+                          $formatted_date = str_replace($en, $id, $formatted_date);
+                        }
 
-            <div class="swiper-slide">
-              <div class="testimonial-wrap">
-                <div class="testimonial-item">
-                  <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="" />
-                  <h3>Matt Brandon</h3>
-                  <h4>Freelancer</h4>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  </div>
-                  <p>
-                    <i class="bi bi-quote quote-icon-left"></i>
-                    <span>Fugiat enim eram quae cillum dolore dolor amet nulla
-                      culpa multos export minim fugiat minim velit minim dolor
-                      enim duis veniam ipsum anim magna sunt elit fore quem
-                      dolore labore illum veniam.</span>
-                    <i class="bi bi-quote quote-icon-right"></i>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- End testimonial item -->
+                        echo $formatted_date;
+                        ?>
+                    </h4>
+                    <div class="stars">
+                      <?php
+                      $bintang = $data['bintang']; // Ambil jumlah bintang dari database
+                      ?>
 
-            <div class="swiper-slide">
-              <div class="testimonial-wrap">
-                <div class="testimonial-item">
-                  <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="" />
-                  <h3>John Larson</h3>
-                  <h4>Entrepreneur</h4>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <!-- Menampilkan bintang -->
+                      <div class="bintang-container">
+                        <?php
+                        for ($i = 0; $i < $bintang; $i++) {
+                          echo "&#9733;"; // Unicode karakter untuk bintang penuh
+                        }
+                        for ($i = $bintang; $i < 5; $i++) {
+                          echo "&#9734;"; // Unicode karakter untuk bintang kosong
+                        }
+                        ?>
+                      </div>
+                    </div>
+                    <p>
+                      <i class="bi bi-quote quote-icon-left"></i>
+                      <span><?php echo $data['isi_komen'] ?></span>
+                      <i class="bi bi-quote quote-icon-right"></i>
+                    </p>
                   </div>
-                  <p>
-                    <i class="bi bi-quote quote-icon-left"></i>
-                    <span>Quis quorum aliqua sint quem legam fore sunt eram irure
-                      aliqua veniam tempor noster veniam enim culpa labore
-                      duis sunt culpa nulla illum cillum fugiat legam esse
-                      veniam culpa fore nisi cillum quid.</span>
-                    <i class="bi bi-quote quote-icon-right"></i>
-                  </p>
                 </div>
               </div>
-            </div>
+            <?php } ?>
             <!-- End testimonial item -->
           </div>
           <div class="swiper-pagination"></div>
