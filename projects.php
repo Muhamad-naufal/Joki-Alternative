@@ -75,7 +75,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
               <li><a href="projects.php" class="active">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $data1['user_name'] . '</li>
+              <li><a href="#">' . $data1['user_name'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -180,13 +180,13 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
             <span class="sitename">General Steel Indonesia</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>Jl. Utan Kayu Raya No.87</p>
-            <p>indonesia, 13120</p>
-            <p class="mt-3">
-              <strong>Phone:</strong> <span>+1 5589 55488 55</span>
-            </p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
-          </div>
+              <p>Jl. Utan Kayu Raya No.87</p>
+              <p>indonesia, 13120</p>
+              <p class="mt-3">
+                <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
+              </p>
+              <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
+            </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
@@ -198,11 +198,11 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
         <div class="col-md-6 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="services.html">Product</a></li>
-            <li><a href="projects.html">Portofolio</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="services.php">Product</a></li>
+            <li><a href="projects.php">Portofolio</a></li>
+            <li><a href="contact.php">Contact</a></li>
           </ul>
         </div>
       </div>

@@ -43,7 +43,14 @@
 			opacity: 0;
 			cursor: pointer;
 		}
+
+		.file-input-container img {
+			max-width: 100%;
+			max-height: 100%;
+			border-radius: 10px;
+		}
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -53,27 +60,39 @@
 				<div class="col-md-6 col-lg-5">
 					<div class="login-wrap p-4 p-md-5">
 						<form method="post" action="register_f.php" class="login-form" enctype="multipart/form-data">
-							<div class="file-input-container mb-2 text-center">
-								<input type="file" id="game-image" name="game-image">
-								<img class="img-fluid" id="game-image-preview" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
+							<div class="d-flex justify-content-center mb-2">
+								<div class="file-input-container">
+									<input type="file" id="game-image" name="game-image" required>
+									<img class="img-fluid" id="game-image-preview" src="<?php echo $data['img'] ?>" alt="Preview Gambar">
+								</div>
 							</div>
 							<div class="form-group">
-								<input name="email" id="email" type="text" class="form-control rounded-left" placeholder="Username" required>
+								<input name="email" id="username" type="text" class="form-control rounded-left" placeholder="Username" required>
+								<div id="username-error" style="color: red;"></div>
+								<div id="username-success" style="color: green;"></div>
 							</div>
 							<div class="form-group">
-								<input name="email_user" id="email_user" type="text" class="form-control rounded-left" placeholder="Email" required>
+								<input name="email_user" id="email_user" type="text" class="form-control rounded-left" placeholder="Nama Lengkap" required>
 							</div>
 							<div class="form-group">
 								<input name="no_telp" id="no_telp" type="text" class="form-control rounded-left" placeholder="No Telpn" required>
 							</div>
 							<div class="form-group d-flex">
 								<input name="password" id="password" type="password" class="form-control rounded-left" placeholder="Password" required>
+
 							</div>
+							<div id="password-error" style="color: red;"></div>
+							<div id="password-success" style="color: green;"></div>
+							<div class="form-group d-flex">
+								<input name="confirm" id="confirm_password" type="password" class="form-control rounded-left" placeholder="Confirm Password" required>
+							</div>
+							<div id="confirm-password-error" style="color: red;"></div>
+							<div id="confirm-password-success" style="color: green;"></div>
 							<a href="login.php">
-								<h3 class="text-center mb-4">sudah punya akun?</h3>
+								<h3 class="text-center mb-4">Already have account?</h3>
 							</a>
 							<div class="form-group">
-								<button type="submit" class="btn btn-primary rounded submit p-3 px-5">Daftar</button>
+								<button type="submit" id="register-btn" class="btn btn-primary rounded submit p-3 px-5">Register</button>
 							</div>
 						</form>
 					</div>
@@ -81,7 +100,6 @@
 			</div>
 		</div>
 	</section>
-
 	<script src="js/jquery.min.js"></script>
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -100,6 +118,148 @@
 				};
 				reader.readAsDataURL(file);
 			}
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			function validateUsername(username) {
+				var usernameRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[\W_])[^\s]+$/;
+				return usernameRegex.test(username);
+			}
+
+			function validatePassword(password) {
+				var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{8,}$/;
+				return passwordRegex.test(password);
+			}
+
+			function validatePasswordsMatch(password, confirmPassword) {
+				return password === confirmPassword;
+			}
+
+			function updateSubmitButtonState() {
+				var username = $('#username').val();
+				var password = $('#password').val();
+				var confirmPassword = $('#confirm_password').val();
+				var usernameValid = validateUsername(username);
+				var passwordValid = validatePassword(password);
+				var passwordsMatch = validatePasswordsMatch(password, confirmPassword);
+				var allFieldsFilled = username && $('#email_user').val() && $('#no_telp').val() && password && confirmPassword;
+				var noErrors = !$('#username-error').text() && !$('#password-error').text() && !$('#confirm-password-error').text();
+
+				if (usernameValid) {
+					$('#username-success').text('Username is available.');
+					$('#username-error').text('');
+				} else {
+					$('#username-success').text('');
+					if (username.length > 0) {
+						$('#username-error').text('Username must contain lowercase letters, numbers, a special character, and no spaces.');
+					} else {
+						$('#username-error').text('');
+					}
+				}
+
+				if (passwordValid) {
+					$('#password-success').text('Password is valid.');
+					$('#password-error').text('');
+				} else {
+					$('#password-success').text('');
+					if (password.length > 0) {
+						$('#password-error').text('Password must be at least 8 characters long, contain uppercase, lowercase, number, and special character.');
+					} else {
+						$('#password-error').text('');
+					}
+				}
+
+				if (confirmPassword.length > 0) {
+					if (passwordsMatch) {
+						$('#confirm-password-success').text('Passwords match.');
+						$('#confirm-password-error').text('');
+					} else {
+						$('#confirm-password-success').text('');
+						$('#confirm-password-error').text('Passwords do not match.');
+					}
+				} else {
+					$('#confirm-password-error').text('');
+					$('#confirm-password-success').text('');
+				}
+
+				if (usernameValid && passwordValid && passwordsMatch && allFieldsFilled && noErrors) {
+					$('#register-btn').prop('disabled', false);
+				} else {
+					$('#register-btn').prop('disabled', true);
+				}
+			}
+
+			$('#username').on('input', function() {
+				var username = $(this).val();
+
+				if (username.length > 0) {
+					$.ajax({
+						url: 'check_username.php',
+						type: 'POST',
+						data: {
+							username: username
+						},
+						success: function(response) {
+							if (response == 'taken') {
+								$('#username-error').text('Username is already taken. Please choose another one.');
+							} else if (response == 'invalid') {
+								$('#username-error').text('Username must contain lowercase letters, numbers, a special character, and no spaces.');
+							} else {
+								$('#username-success').text('Username is available.');
+								$('#username-error').text('');
+							}
+							updateSubmitButtonState();
+						}
+					});
+				} else {
+					$('#username-error').text('');
+					$('#username-success').text('');
+				}
+
+				updateSubmitButtonState();
+			});
+
+			$('#password').on('input', function() {
+				var password = $(this).val();
+
+				if (password.length > 0) {
+					if (!validatePassword(password)) {
+						$('#password-error').text('Password must be at least 8 characters long, contain uppercase, lowercase, number, and special character.');
+					} else {
+						$('#password-success').text('Password is valid.');
+						$('#password-error').text('');
+					}
+				} else {
+					$('#password-error').text('');
+					$('#password-success').text('');
+				}
+
+				updateSubmitButtonState();
+			});
+
+			$('#confirm_password').on('input', function() {
+				var password = $('#password').val();
+				var confirmPassword = $(this).val();
+
+				if (confirmPassword.length > 0) {
+					if (!validatePasswordsMatch(password, confirmPassword)) {
+						$('#confirm-password-error').text('Passwords do not match.');
+					} else {
+						$('#confirm-password-success').text('Passwords match.');
+						$('#confirm-password-error').text('');
+					}
+				} else {
+					$('#confirm-password-error').text('');
+					$('#confirm-password-success').text('');
+				}
+
+				updateSubmitButtonState();
+			});
+
+			$('#email_user, #no_telp').on('input', function() {
+				updateSubmitButtonState();
+			});
 		});
 	</script>
 </body>

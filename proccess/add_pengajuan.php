@@ -3,18 +3,6 @@ include 'config.php';
 
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['user_name'])) {
-    header("location:../login.php");
-    exit();
-}
-
-// Get user ID
-$username = $_SESSION['user_name'];
-$userQuery = mysqli_query($Connection, "SELECT user_id FROM `user` WHERE `user_name` = '$username'");
-$userData = mysqli_fetch_assoc($userQuery);
-$id_user = $userData['user_id'];
-
 // Insert data into pengajuan table
 if(isset($_POST['submit'])) {
     // Loop through each product submitted

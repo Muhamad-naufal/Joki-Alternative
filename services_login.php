@@ -99,7 +99,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php" class="active">Pengajuan</a></li>
-              <li>' . $data1['user_name'] . '</li>
+              <li><a href="#">' . $data1['user_name'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">

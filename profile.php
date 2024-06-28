@@ -107,7 +107,7 @@ $data = mysqli_fetch_array($syntax);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li>' . $data['user_name'] . '</li>
+              <li><a href="#">' . $data['nama_lengkap'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -133,25 +133,22 @@ $data = mysqli_fetch_array($syntax);
       <div class="container position-relative">
         <h1>Profile</h1>
         <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Profile</li>
-          </ol>
         </nav>
       </div>
     </div>
     <!-- End Page Title -->
 
     <!-- Profile Section -->
-    <section class="vh-100" style="background-color: #f4f5f7;">
+    <section style="background-color: #f4f5f7; padding:0px">
       <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="row d-flex justify-content-center align-items-center">
           <div class="col col-lg-6 mb-4 mb-lg-0">
             <div class="card mb-3" style="border-radius: .5rem;">
               <div class="row g-0">
                 <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
                   <img src="<?php echo $data['gambar']; ?>" style="max-width: 80px;" class="img-fluid my-5" alt="Profile Picture" />
-                  <h5><?php echo $data['user_name']; ?></h5>
+
+                  <h5><?php echo $data['nama_lengkap']; ?></h5>
                   <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="far fa-edit mb-5" style="color: white;"></i>
                   </a>
@@ -161,12 +158,10 @@ $data = mysqli_fetch_array($syntax);
                     <h6>Information</h6>
                     <hr class="mt-0 mb-4">
                     <div class="row pt-1">
-                      <div class="col-6 mb-3">
-                        <h6>Email</h6>
-                        <p class="text-muted"><?php echo $data['email']; ?></p>
-                      </div>
-                      <div class="col-6 mb-3">
-                        <h6>Phone</h6>
+                      <div class="col-12 mb-3">
+                        <h6>USERNAME</h6>
+                        <p class="text-muted"><?php echo $data['user_name']; ?></p>
+                        <h6>PHONE</h6>
                         <p class="text-muted"><?php echo $data['no_telp']; ?></p>
                       </div>
                     </div>
@@ -201,7 +196,7 @@ $data = mysqli_fetch_array($syntax);
                     <div class="form-group">
                       <input type="hidden" name="user_id" value="<?php echo $data['user_id']; ?>">
                       <input name="username" id="username" type="text" class="form-control rounded-left mb-2" placeholder="Username" value="<?php echo $data['user_name']; ?>">
-                      <input name="email" id="email" type="text" class="form-control rounded-left mb-2" placeholder="Email" value="<?php echo $data['email']; ?>">
+                      <input name="email" id="email" type="text" class="form-control rounded-left mb-2" placeholder="Email" value="<?php echo $data['nama_lengkap']; ?>">
                       <input name="no_telp" id="no_telp" type="text" class="form-control rounded-left mb-2" placeholder="No Telp" value="<?php echo $data['no_telp']; ?>">
                       <input name="new_password" id="new_password" type="password" class="form-control rounded-left mb-2" value="<?php echo $data['password']; ?>" placeholder="New Password">
                     </div>
@@ -231,9 +226,9 @@ $data = mysqli_fetch_array($syntax);
             <p>Jl. Utan Kayu Raya No.87</p>
             <p>indonesia, 13120</p>
             <p class="mt-3">
-              <strong>Phone:</strong> <span>+1 5589 55488 55</span>
+              <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
             </p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -246,11 +241,11 @@ $data = mysqli_fetch_array($syntax);
         <div class="col-md-6 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="services.html">Product</a></li>
-            <li><a href="projects.html">Portofolio</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="services.php">Product</a></li>
+            <li><a href="projects.php">Portofolio</a></li>
+            <li><a href="contact.php">Contact</a></li>
           </ul>
         </div>
       </div>

@@ -15,12 +15,12 @@ if ($_FILES["game-image"]["error"] == UPLOAD_ERR_OK) {
     if (move_uploaded_file($_FILES["game-image"]["tmp_name"], $target_file)) {
         echo "The file " . htmlspecialchars(basename($_FILES["game-image"]["name"])) . " has been uploaded.<br>";
 
-        $sql = "UPDATE `user` SET `user_name` = '$username', `gambar` = '$target_file', `email` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
+        $sql = "UPDATE `user` SET `user_name` = '$username', `gambar` = '$target_file', `nama_lengkap` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
     } else {
         echo "Sorry, there was an error uploading your file.<br>";
     }
 } else {
-    $sql = "UPDATE `user` SET `user_name` = '$username', `email` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
+    $sql = "UPDATE `user` SET `user_name` = '$username', `nama_lengkap` = '$email', `no_telp` = '$telp', `password` = '$new_password' WHERE `user_id` = '$user_id'";
 }
 
 if (mysqli_query($Connection, $sql)) {
