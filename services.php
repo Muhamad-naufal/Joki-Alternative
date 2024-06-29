@@ -95,7 +95,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li><a href="#">' . $data1['user_name'] . '</a></li>
+              <li><a href="#">' . $data1['nama_lengkap'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -127,7 +127,7 @@ $data = mysqli_fetch_array($sql);
           </ol>
         </nav>
         <div class="mt-3">
-          <a href="login/login.php" class="btn-get-ajukan">Ajukan Penawaran</a>
+          <a href="services_login.php" class="btn-get-ajukan">Ajukan Penawaran</a>
         </div>
       </div>
     </div>

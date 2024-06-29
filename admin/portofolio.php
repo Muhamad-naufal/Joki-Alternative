@@ -1,12 +1,13 @@
 <?php
+include "config.php";
 session_start();
 if (!isset($_SESSION['username'])) {
   header("location:login.php");
 } else {
-  $username = $_SESSION['username'];
+  $id_admin = $_SESSION['admin_id'];
+  $sql = mysqli_query($Connection, "SELECT * FROM `admin` WHERE admin_id='$id_admin'");
+  $user = mysqli_fetch_assoc($sql);
 }
-
-include "config.php";
 $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
 ?>
 
@@ -111,8 +112,8 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user['username'] ?></span>
+                <img class="img-profile rounded-circle" src="proccess/<?php echo $user['gambar'] ?>" />
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -186,16 +187,16 @@ $query = "SELECT * FROM portofolio ORDER BY updated_at DESC";
                         <td><?php echo $no ?></td>
                         <td><?php echo $nama ?></td>
                         <td>
-                          <img src="proccess/<?php echo $gambar?>" alt="gambar" width="100px" height="100px" />
+                          <img src="proccess/<?php echo $gambar ?>" alt="gambar" width="100px" height="100px" />
                         </td>
                         <td>
-                        <?php echo $keterangan?>
+                          <?php echo $keterangan ?>
                         </td>
                         <td>
-                        <?php echo $nama_pt?>
+                          <?php echo $nama_pt ?>
                         </td>
                         <td>
-                          <a href="edit_porto.php?porto_id=<?php echo $id?>" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                          <a href="edit_porto.php?porto_id=<?php echo $id ?>" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                           <a href="proccess/hapus_porto.php?porto_id=<?php echo $row['porto_id'] ?>" class="btn btn-danger" onclick="return confirm('Data Akan Dihapus?')"><i class="fa-solid fa-trash"></i></a>
                         </td>
                       </tr>

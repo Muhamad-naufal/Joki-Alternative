@@ -88,7 +88,7 @@
 							</div>
 							<div id="confirm-password-error" style="color: red;"></div>
 							<div id="confirm-password-success" style="color: green;"></div>
-							<a href="login.php">
+							<a href="login/login.php">
 								<h3 class="text-center mb-4">Already have account?</h3>
 							</a>
 							<div class="form-group">

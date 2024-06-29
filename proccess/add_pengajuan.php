@@ -3,6 +3,9 @@ include 'config.php';
 
 session_start();
 
+// Get user ID
+$id_user = $_SESSION['user_id'];
+
 // Insert data into pengajuan table
 if(isset($_POST['submit'])) {
     // Loop through each product submitted
@@ -15,7 +18,7 @@ if(isset($_POST['submit'])) {
             $nama = $_POST['nama_pt']; // Email for each product
 
             // Insert the product into pengajuan table
-            $sql = "INSERT INTO `pengajuan` (`id_produk`, `id_user`, `deskripsi`, `created_at`, `jumlah`, `status`, `email_usaha`, `nama_pt`) 
+            $sql = "INSERT INTO pengajuan (id_produk, id_user, deskripsi, created_at, jumlah, status, email_usaha, nama_pt) 
                     VALUES ('$product_id', '$id_user', '$ket', current_timestamp(), '$jumlah', 'pending', '$email', '$nama')";
             
             if (mysqli_query($Connection, $sql)) {

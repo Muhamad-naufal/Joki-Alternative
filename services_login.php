@@ -99,7 +99,7 @@ $data = mysqli_fetch_array($sql);
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php" class="active">Pengajuan</a></li>
-              <li><a href="#">' . $data1['user_name'] . '</a></li>
+              <li><a href="#">' . $data1['nama_lengkap'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -186,7 +186,7 @@ $data = mysqli_fetch_array($sql);
                 ?>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary" name="submit">Masukkan</button>
+            <button type="submit" class="btn btn-warning" name="submit">Masukkan</button>
           </form>
           <br />
           <p class="mb-0 small">

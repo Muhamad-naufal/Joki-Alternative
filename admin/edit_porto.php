@@ -1,12 +1,13 @@
 <?php
+include 'config.php';
 session_start();
 if (!isset($_SESSION['username'])) {
   header("location:login.php");
 } else {
-  $username = $_SESSION['username'];
+  $id_admin = $_SESSION['admin_id'];
+  $sql = mysqli_query($Connection, "SELECT * FROM `admin` WHERE admin_id='$id_admin'");
+  $user = mysqli_fetch_assoc($sql);
 }
-
-include 'config.php';
 $query = "SELECT * FROM portofolio WHERE porto_id = '$_GET[porto_id]'";
 $result = mysqli_query($Connection, $query);
 $data = mysqli_fetch_array($result);
@@ -99,14 +100,14 @@ $nama_pt = $data['nama_pt'];
       <div class="sidebar-heading">Interface</div>
 
       <!-- Nav Item - Charts -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="product.php">
           <i class="fa-solid fa-shop"></i>
           <span>Product</span></a>
       </li>
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="portofolio.php">
           <i class="fa-solid fa-bars-progress"></i>
           <span>Portofolio</span></a>
@@ -147,8 +148,8 @@ $nama_pt = $data['nama_pt'];
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user['username'] ?></span>
+              <img class="img-profile rounded-circle" src="proccess/<?php echo $user['gambar'] ?>" />
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

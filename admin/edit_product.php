@@ -1,12 +1,13 @@
 <?php
+include 'config.php';
 session_start();
 if (!isset($_SESSION['username'])) {
   header("location:login.php");
 } else {
-  $username = $_SESSION['username'];
+  $id_admin = $_SESSION['admin_id'];
+  $sql = mysqli_query($Connection, "SELECT * FROM `admin` WHERE admin_id='$id_admin'");
+  $user = mysqli_fetch_assoc($sql);
 }
-
-include 'config.php';
 $query = "SELECT * FROM product WHERE product_id = '$_GET[product_id]'";
 $result = mysqli_query($Connection, $query);
 $data = mysqli_fetch_array($result);
@@ -146,8 +147,8 @@ $ket = $data['ket_produk'];
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user['username'] ?></span>
+                <img class="img-profile rounded-circle" src="proccess/<?php echo $user['gambar'] ?>" />
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -184,12 +185,12 @@ $ket = $data['ket_produk'];
                 </div>
                 <div class="mb-3">
                   <label for="game-title" class="form-label">Nama Produk</label>
-                  <input type="hidden" name="product_id" value="<?php echo $_GET['product_id']?>">
-                  <input type="text" class="form-control" id="nama_prod" name="nama_prod" value="<?php echo $nama?>" required>
+                  <input type="hidden" name="product_id" value="<?php echo $_GET['product_id'] ?>">
+                  <input type="text" class="form-control" id="nama_prod" name="nama_prod" value="<?php echo $nama ?>" required>
                 </div>
                 <div class="mb-3">
                   <label for="product-description" class="form-label">Deskripsi Game</label>
-                  <textarea class="form-control" id="ket" name="ket" rows="3" required><?php echo $ket?></textarea>
+                  <textarea class="form-control" id="ket" name="ket" rows="3" required><?php echo $ket ?></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Masukkan</button>
               </form>

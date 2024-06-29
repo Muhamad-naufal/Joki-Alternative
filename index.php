@@ -43,33 +43,37 @@ $data = mysqli_fetch_array($sql);
     .star-rating {
       display: flex;
       flex-direction: row-reverse;
-      justify-content: center;
-      margin: 1rem 0;
+      justify-content: left;
     }
 
     .star-rating input[type="radio"] {
       display: none;
     }
 
+    /* Bintang penuh */
     .star-rating label {
-      font-size: 2rem;
+      font-size: 20px;
       color: #ccc;
       cursor: pointer;
+      text-shadow: 0 0 1px yellow;
+      /* Menambahkan shadow kuning */
+    }
+
+    /* Bintang kosong */
+    .star-rating label:before {
+      content: "\f005";
+      /* Kode untuk bintang penuh dalam FontAwesome atau Bootstrap Icons */
+      font-family: "Font Awesome 5 Free";
+      /* Ganti dengan nama font Anda */
+      color: white;
+      /* Warna isi bintang kosong */
     }
 
     .star-rating label:hover,
     .star-rating label:hover~label,
     .star-rating input[type="radio"]:checked~label {
       color: #f5c518;
-    }
-
-    .input-group .btn {
-      border-radius: 0;
-    }
-
-    .quantity-input {
-      text-align: center;
-      max-width: 60px;
+      /* Warna saat hover atau dipilih */
     }
 
     .btn i {
@@ -418,32 +422,40 @@ $data = mysqli_fetch_array($sql);
                 <!-- Form Komentar -->
                 <form id="commentForm" action="proccess/tambah_komen.php" method="post">
                   <input type="hidden" name="user_id" value="<?php echo $id; ?>">
-                  <div class="star-rating">
-                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
-                  </div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <img src="<?php echo $data1['gambar']; ?>" alt="Profile Picture" style="height: 80px; width:80px; border-radius:50%; " srcset="">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="comment"><i class="bi bi-chat-left-text"></i> Add Comment</label>
+                        <div class="star-rating">
+                          <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                          <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                          <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                          <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                        </div>
 
-                  <!-- Tambahkan script jQuery untuk mengatur interaksi -->
-                  <script>
-                    $(document).ready(function() {
-                      // Logika untuk menangani klik pada label bintang
-                      $('.star-rating label').click(function() {
-                        var rating = $(this).prev('input').val();
-                        $(this).parent().find('input').prop('checked', false);
-                        $(this).prev('input').prop('checked', true);
-                      });
-                    });
-                  </script>
-
-                  <div class="form-group mt-3">
-                    <label for="comment"><i class="bi bi-chat-left-text"></i> Comment</label>
-                    <input type="hidden" name="user" id="user" value="<?php echo $data1['user_name'] ?>">
-                    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
+                        <!-- Tambahkan script jQuery untuk mengatur interaksi -->
+                        <script>
+                          $(document).ready(function() {
+                            // Logika untuk menangani klik pada label bintang
+                            $('.star-rating label').click(function() {
+                              var rating = $(this).prev('input').val();
+                              $(this).parent().find('input').prop('checked', false);
+                              $(this).prev('input').prop('checked', true);
+                            });
+                          });
+                        </script>
+                        <div class="form-group mt-3">
+                          <input type="hidden" name="user" id="user" value="<?php echo $data1['user_name'] ?>">
+                          <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-check2"></i> Submit</button>
+                      </div>
+                    </div>
                   </div>
-                  <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Submit</button>
                 </form>
               </div>
               <div class="col-md-6">
@@ -585,13 +597,13 @@ $data = mysqli_fetch_array($sql);
     <!-- /Testimonials Section -->
 
     <footer id="footer" class="footer">
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">General Steel Indonesia</span>
-          </a>
-          <div class="footer-contact pt-3">
+      <div class="container footer-top">
+        <div class="row gy-4">
+          <div class="col-md-6 footer-about">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <span class="sitename">General Steel Indonesia</span>
+            </a>
+            <div class="footer-contact pt-3">
               <p>Jl. Utan Kayu Raya No.87</p>
               <p>indonesia, 13120</p>
               <p class="mt-3">
@@ -599,42 +611,42 @@ $data = mysqli_fetch_array($sql);
               </p>
               <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
             </div>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+            <div class="social-links d-flex mt-4">
+              <a href=""><i class="bi bi-twitter-x"></i></a>
+              <a href=""><i class="bi bi-facebook"></i></a>
+              <a href=""><i class="bi bi-instagram"></i></a>
+              <a href=""><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="index.php">Home</a></li>
+              <li><a href="about.php">About</a></li>
+              <li><a href="services.php">Product</a></li>
+              <li><a href="projects.php">Portofolio</a></li>
+              <li><a href="contact.php">Contact</a></li>
+            </ul>
           </div>
         </div>
+      </div>
 
-        <div class="col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="about.php">About</a></li>
-            <li><a href="services.php">Product</a></li>
-            <li><a href="projects.php">Portofolio</a></li>
-            <li><a href="contact.php">Contact</a></li>
-          </ul>
+      <div class="container copyright text-center mt-4">
+        <p>
+          © <span>Copyright</span>
+          <strong class="px-1 sitename">General Steel Indonesia</strong>
+          <span>All Rights Reserved</span>
+        </p>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you've purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+          Designed by <a href="#">GSI</a>
         </div>
       </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>
-        © <span>Copyright</span>
-        <strong class="px-1 sitename">General Steel Indonesia</strong>
-        <span>All Rights Reserved</span>
-      </p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="#">GSI</a>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

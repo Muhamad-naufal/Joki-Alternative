@@ -131,9 +131,7 @@ $data = mysqli_fetch_array($syntax);
     <!-- Page Title -->
     <div class="page-title" data-aos="fade" style="background-image: url(assets/img/page-title-bg.jpg)">
       <div class="container position-relative">
-        <h1>Profile</h1>
-        <nav class="breadcrumbs">
-        </nav>
+        <h1 style="margin-top: -30px;">Profile</h1>
       </div>
     </div>
     <!-- End Page Title -->
@@ -146,8 +144,7 @@ $data = mysqli_fetch_array($syntax);
             <div class="card mb-3" style="border-radius: .5rem;">
               <div class="row g-0">
                 <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                  <img src="<?php echo $data['gambar']; ?>" style="max-width: 80px;" class="img-fluid my-5" alt="Profile Picture" />
-
+                  <img src="<?php echo $data['gambar']; ?>" style="width: 80px; height:80px; border-radius:50%" class="img-fluid my-5" alt="Profile Picture" />
                   <h5><?php echo $data['nama_lengkap']; ?></h5>
                   <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="far fa-edit mb-5" style="color: white;"></i>

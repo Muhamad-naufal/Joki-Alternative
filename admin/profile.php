@@ -1,13 +1,13 @@
 <?php
+include "config.php";
 session_start();
 if (!isset($_SESSION['username'])) {
     header("location:login.php");
 }
+$id_admin = $_SESSION['admin_id'];
+$sql = mysqli_query($Connection, "SELECT * FROM `admin` WHERE admin_id='$id_admin'");
+$user = mysqli_fetch_assoc($sql);
 
-include 'config.php';
-$username = $_SESSION['username'];
-$sql = mysqli_query($Connection, "SELECT * FROM `admin` where `username` = '$username'");
-$data = mysqli_fetch_array($sql);
 
 ?>
 
@@ -21,7 +21,7 @@ $data = mysqli_fetch_array($sql);
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>GSI Admin - Dashboard</title>
+    <title>GSI Admin - Profile</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
@@ -29,6 +29,40 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="css/profile.css" rel="stylesheet" />
+    <style>
+        /* Tambahan */
+        .file-input-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .file-input-container:hover {
+            border-color: #999;
+        }
+
+        .file-input-container i {
+            font-size: 50px;
+            color: #ccc;
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -106,8 +140,8 @@ $data = mysqli_fetch_array($sql);
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $username ?></span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user['username'] ?></span>
+                                <img class="img-profile rounded-circle" src="proccess/<?php echo $user['gambar'] ?>" />
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -128,18 +162,77 @@ $data = mysqli_fetch_array($sql);
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Profile Page</h1>
-                        <h2 class="h3 mb-0 text-gray-800"><?php echo $username ?></h2>
-                    </div>
+                    <!-- Profile Section -->
+                    <section style="background-color: #f4f5f7; padding:0px">
+                        <div class="container py-5 h-100">
+                            <div class="row d-flex justify-content-center align-items-center">
+                                <div class="col col-lg-6 mb-4 mb-lg-0">
+                                    <div class="card mb-3" style="border-radius: .5rem;">
+                                        <div class="row g-0">
+                                            <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                                                <img src="proccess/<?php echo $user['gambar']; ?>" style="width: 80px; height:80px; border-radius:50%" class="img-fluid my-5" alt="Profile Picture" />
+                                                <h5 class="mb-0"><?php echo $user['nama']; ?></h5>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="far fa-edit mb-5" style="color: white;"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body p-4">
+                                                    <h6>Information</h6>
+                                                    <hr class="mt-0 mb-4">
+                                                    <div class="row pt-1">
+                                                        <div class="col-12 mb-3">
+                                                            <h6>USERNAME</h6>
+                                                            <p class="text-muted"><?php echo $user['username']; ?></p>
+                                                            <h6>PHONE</h6>
+                                                            <p class="text-muted"><?php echo $user['telp']; ?></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-                    <!-- Content Row -->
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Username :</h3>
-                                <h5><?php echo $username ?></h5>
+                    <!-- Modal-->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Your Data</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="proccess/update_admin.php" method="post" enctype="multipart/form-data">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="file-input-container mb-2 text-center">
+                                                        <input type="file" id="game-image" name="game-image">
+                                                        <img class="img-fluid" id="game-image-preview" src="proccess/<?php echo $user['gambar'] ?>" alt="Preview Gambar">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="admin_id" value="<?php echo $user['admin_id']; ?>">
+                                                        <input name="username" id="username" type="text" class="form-control rounded-left mb-2" placeholder="Username" value="<?php echo $user['username']; ?>">
+                                                        <input name="nama" id="nama" type="text" class="form-control rounded-left mb-2" placeholder="Nama" value="<?php echo $user['nama']; ?>">
+                                                        <input name="no_telp" id="no_telp" type="text" class="form-control rounded-left mb-2" placeholder="No Telp" value="<?php echo $user['telp']; ?>">
+                                                        <input name="new_password" id="new_password" type="password" class="form-control rounded-left mb-2" value="<?php echo $user['password']; ?>" placeholder="New Password">
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -207,6 +300,8 @@ $data = mysqli_fetch_array($sql);
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     <script src="https://kit.fontawesome.com/6beb2a82fc.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         document.getElementById('game-image').addEventListener('change', function(event) {
             const file = event.target.files[0];

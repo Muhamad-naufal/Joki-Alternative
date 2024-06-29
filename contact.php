@@ -74,7 +74,7 @@ if (isset($_SESSION['user_id'])) {
               <li><a href="projects.php">Portfolio</a></li>
               <li><a href="contact.php" class="active">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li><a href="#">' . $data['user_name'] . '</a></li>
+              <li><a href="#">' . $data['nama_lengkap'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">

@@ -75,7 +75,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
               <li><a href="projects.php" class="active">Portfolio</a></li>
               <li><a href="contact.php">Contact</a></li>
               <li><a href="services_login.php">Pengajuan</a></li>
-              <li><a href="#">' . $data1['user_name'] . '</a></li>
+              <li><a href="#">' . $data1['nama_lengkap'] . '</a></li>
               <div class="profile">
                   <img src="' . $profilePictureUrl . '" alt="Profile Picture">
                   <div class="dropdown-content">
@@ -157,13 +157,18 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Project Details</h1>
+          <h1 class="modal-title fs-5" id="modalName"></h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <img src="" class="img-fluid" id="modalImage" />
-          <h3 id="modalName"></h3>
-          <p id="modalDescription"></p>
+          <div class="row">
+            <div class="col-md-4 col-12">
+              <img src="" class="img-fluid" id="modalImage" style="max-width: 150px;" />
+            </div>
+            <div class="col-md-8 col-12">
+              <p id="modalDescription">This is the description text. If this text exceeds the height of the image, it will wrap to the next line and continue below the image, spanning the full width of the modal.</p>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -180,13 +185,13 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
             <span class="sitename">General Steel Indonesia</span>
           </a>
           <div class="footer-contact pt-3">
-              <p>Jl. Utan Kayu Raya No.87</p>
-              <p>indonesia, 13120</p>
-              <p class="mt-3">
-                <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
-              </p>
-              <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
-            </div>
+            <p>Jl. Utan Kayu Raya No.87</p>
+            <p>indonesia, 13120</p>
+            <p class="mt-3">
+              <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
+            </p>
+            <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
+          </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
@@ -261,6 +266,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
       });
     });
   </script>
+  
 </body>
 
 </html>
