@@ -166,7 +166,7 @@ $sql = mysqli_query($Connection, "SELECT * FROM `portofolio`");
               <img src="" class="img-fluid" id="modalImage" style="max-width: 150px;" />
             </div>
             <div class="col-md-8 col-12">
-              <p id="modalDescription">This is the description text. If this text exceeds the height of the image, it will wrap to the next line and continue below the image, spanning the full width of the modal.</p>
+              <p id="modalDescription" style="text-align: justify;"> This is the description text. If this text exceeds the height of the image, it will wrap to the next line and continue below the image, spanning the full width of the modal.</p>
             </div>
           </div>
         </div>

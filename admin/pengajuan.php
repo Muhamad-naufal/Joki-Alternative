@@ -39,6 +39,35 @@ $result = $Connection->query($sql);
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+  <style>
+    .custom-dropdown {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      max-width: 150px;
+      /* Sesuaikan lebar dropdown */
+    }
+
+    .custom-dropdown select {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    .custom-dropdown select:focus {
+      outline: none;
+      border-color: #007bff;
+      /* Warna outline saat fokus */
+    }
+
+    .custom-dropdown select option {
+      font-size: 14px;
+    }
+  </style>
 
 </head>
 
@@ -156,72 +185,112 @@ $result = $Connection->query($sql);
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <tbody>
-                    <?php
-                    $no = 1;
-                    $currentDate = '';
-                    $currentPT = '';
+                <?php
+                // Include the database configuration file
+                include 'config.php';
 
-                    function formatTanggal($dateTime)
-                    {
-                      setlocale(LC_TIME, 'id_ID');
-                      $timestamp = strtotime($dateTime);
-                      return strftime('%d %B %Y, pukul %H:%M WIB', $timestamp);
-                    }
+                // Fetch the data from the database
+                $query = "SELECT pengajuan.*, product.nama_produk 
+          FROM pengajuan 
+          JOIN product ON pengajuan.id_produk = product.product_id 
+          ORDER BY pengajuan.created_at";
+                $result = mysqli_query($Connection, $query);
 
-                    while ($row = mysqli_fetch_array($result)) {
-                      $createdAt = $row['created_at'];
-                      $namaPT = $row['nama_pt'];
-                      $emailPT = $row['email_usaha'];
+                $currentDate = '';
+                $currentPT = '';
 
-                      // Group by created_at
-                      if ($createdAt != $currentDate) {
-                        if ($currentDate != '') {
-                          echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
-                          echo "</tr></tbody></table>";
-                        }
-                        echo "<h4>Pengajuan Pada: " . formatTanggal($createdAt) . "</h4>";
-                        echo "<h6>Nama PT: " . $namaPT . "</h6>";
-                        echo "<h6>Email PT: <a href='mailto:" . $emailPT . "'>" . $emailPT . "</a></h6>";
-                        echo "<table id='table_" . str_replace(' ', '_', $namaPT) . "' class='table table-bordered' width='100%' cellspacing='0'>";
-                        echo "<thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th></tr></thead>";
-                        echo "<tbody>";
-                        $currentDate = $createdAt;
-                        $currentPT = $namaPT;
-                      }
+                function formatTanggal($dateTime)
+                {
+                  setlocale(LC_TIME, 'id_ID');
+                  $timestamp = strtotime($dateTime);
+                  return strftime('%d %B %Y, pukul %H:%M WIB', $timestamp);
+                }
 
-                      // Group by nama_pt
-                      if ($namaPT != $currentPT) {
-                        if ($currentPT != '') {
-                          echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
-                          echo "</tr></tbody></table>";
-                        }
-                        echo "<tr><td colspan='10'><h4>Pengajuan Pada: " . formatTanggal($createdAt) . "</h4></td></tr>";
-                        echo "<tr><td colspan='10'><h6>Nama PT: " . $namaPT . "</h6></td></tr>";
-                        echo "<tr><td colspan='10'><h6>Email PT: <a href='mailto:" . $emailPT . "'>" . $emailPT . "</a></h6></td></tr>";
-                        echo "<table id='table_" . str_replace(' ', '_', $namaPT) . "' class='table table-bordered' width='100%' cellspacing='0'>";
-                        echo "<thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th><th>Status</th><th>Print</th></tr></thead>";
-                        echo "<tbody>";
-                        $currentPT = $namaPT;
-                      }
-                    ?>
+                // Group data by date
+                $groupedData = [];
+                while ($row = mysqli_fetch_array($result)) {
+                  $createdAt = $row['created_at'];
+                  $groupedData[$createdAt][] = $row;
+                }
+                ?>
+                <div class="pengajuan-container">
+                  <?php
+                  foreach ($groupedData as $createdAt => $rows) {
+                    $namaPT = $rows[0]['nama_pt'];
+                    $emailPT = $rows[0]['email_usaha'];
+                    $status = $rows[0]['status'];
+                    $rowCount = count($rows); // Number of rows in the current group
+
+                    echo "<h4>Pengajuan Pada: " . formatTanggal($createdAt) . "</h4>";
+                    echo "<h6>Nama PT: " . $namaPT . "</h6>";
+                    echo "<h6>Email PT: <a href='mailto:" . $emailPT . "'>" . $emailPT . "</a></h6>";
+                    echo "<table id='table_" . str_replace(' ', '_', $namaPT) . "' class='table table-bordered' width='100%' cellspacing='0'>";
+                    echo "<thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Keterangan</th><th>Status</th></tr></thead>";
+                    echo "<tbody>";
+
+                    foreach ($rows as $index => $row) {
+                  ?>
                       <tr>
-                        <td><?php echo $no++; ?></td>
+                        <td><?php echo $index + 1; ?></td>
                         <td><?php echo $row['nama_produk']; ?></td>
                         <td><?php echo $row['jumlah']; ?></td>
                         <td><?php echo $row['deskripsi']; ?></td>
+                        <?php if ($index == 0) { // Only display the status dropdown in the first row 
+                        ?>
+                          <td rowspan="<?php echo $rowCount; ?>" class="custom-dropdown">
+                            <select id="statusDropdown" onchange="updateStatus('<?php echo $createdAt; ?>', this)">
+                              <option value="pending" <?php if ($status == 'pending') echo 'selected'; ?>>Pending</option>
+                              <option value="proccess" <?php if ($status == 'proccess') echo 'selected'; ?>>Process</option>
+                              <option value="accept" <?php if ($status == 'accept') echo 'selected'; ?>>Accept</option>
+                            </select>
+
+                          </td>
+                        <?php } ?>
                       </tr>
-                    <?php
+                  <?php
                     }
-                    // Print button for the last group
-                    if ($currentPT != '') {
-                      echo '<td colspan="10" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $currentPT) . '\')">Print</button></td>';
-                      echo "</tr></tbody></table>";
-                    }
-                    ?>
-                  </tbody>
-                </table>
+                    echo '<td colspan="5" style="text-align: right;"><button class="btn btn-primary btn-sm" onclick="printTable(\'table_' . str_replace(' ', '_', $namaPT) . '\')">Print</button></td>';
+                    echo "</tbody></table>";
+                  }
+                  ?>
+                </div>
+
+                <script>
+                  function updateStatus(date, statusElement) {
+                    var status = statusElement.value; // Ambil nilai status dari dropdown
+
+                    console.log('Date:', date);
+                    console.log('Status:', status); // Debugging
+
+                    console.log('Status Element:', statusElement);
+                    console.log('Status Element Value:', statusElement.value);
+
+
+                    $.ajax({
+                      url: 'update_status.php',
+                      type: 'POST',
+                      data: {
+                        date: date,
+                        status: status
+                      },
+                      success: function(response) {
+                        // Handle response dari server
+                        if (response.trim() === 'success') {
+                          // Update status langsung di tampilan
+                          $(statusElement).closest('tr').find('.status-cell').text(status);
+                          alert('Status berhasil diperbarui!');
+                        } else {
+                          alert('Gagal memperbarui status: ' + response);
+                        }
+                      },
+                      error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat memperbarui status.');
+                      }
+                    });
+                  }
+                </script>
+
                 <script>
                   function printTableRow(button) {
                     var table = $(button).closest('table');

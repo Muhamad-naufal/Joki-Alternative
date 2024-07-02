@@ -44,6 +44,7 @@ $data = mysqli_fetch_array($sql);
       display: flex;
       flex-direction: row-reverse;
       justify-content: left;
+      margin-left: 15px;
     }
 
     .star-rating input[type="radio"] {
@@ -55,18 +56,8 @@ $data = mysqli_fetch_array($sql);
       font-size: 20px;
       color: #ccc;
       cursor: pointer;
-      text-shadow: 0 0 1px yellow;
+      margin-left: 2px
       /* Menambahkan shadow kuning */
-    }
-
-    /* Bintang kosong */
-    .star-rating label:before {
-      content: "\f005";
-      /* Kode untuk bintang penuh dalam FontAwesome atau Bootstrap Icons */
-      font-family: "Font Awesome 5 Free";
-      /* Ganti dengan nama font Anda */
-      color: white;
-      /* Warna isi bintang kosong */
     }
 
     .star-rating label:hover,
@@ -430,11 +421,11 @@ $data = mysqli_fetch_array($sql);
                       <div class="col-md-6">
                         <label for="comment"><i class="bi bi-chat-left-text"></i> Add Comment</label>
                         <div class="star-rating">
-                          <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
-                          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
-                          <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
-                          <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
-                          <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                          <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">&#9733;</label>
+                          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">&#9733;</label>
+                          <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">&#9733;</label>
+                          <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">&#9733;</label>
+                          <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">&#9733;</label>
                         </div>
 
                         <!-- Tambahkan script jQuery untuk mengatur interaksi -->
@@ -571,10 +562,10 @@ $data = mysqli_fetch_array($sql);
                       <div class="bintang-container">
                         <?php
                         for ($i = 0; $i < $bintang; $i++) {
-                          echo "&#9733;"; // Unicode karakter untuk bintang penuh
+                          echo '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>'; // Unicode karakter untuk bintang penuh
                         }
                         for ($i = $bintang; $i < 5; $i++) {
-                          echo "&#9734;"; // Unicode karakter untuk bintang kosong
+                          echo "<i class='fa-regular fa-star' style='color: #FFD43B;'></i>"; // Unicode karakter untuk bintang kosong
                         }
                         ?>
                       </div>
@@ -666,6 +657,7 @@ $data = mysqli_fetch_array($sql);
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="https://kit.fontawesome.com/25db4f44a1.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 

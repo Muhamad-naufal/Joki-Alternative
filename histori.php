@@ -115,45 +115,65 @@ $result = mysqli_query($Connection, $sql1);
       <div class="container">
         <div class="row position-relative">
           <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Nama Barang</th>
-                  <th>Jumlah</th>
-                  <th>Ket Penawaran</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Nama Barang</th>
-                  <th>Jumlah</th>
-                  <th>Ket Penawaran</th>
-                </tr>
-              </tfoot>
-              <tbody>
-                <?php
-                $no = 1;
-                while ($row = mysqli_fetch_assoc($result)) {
-                  $product_id = $row['id_produk'];
-                  $productQuery = mysqli_query($Connection, "SELECT nama_produk FROM product WHERE product_id = '$product_id'");
-                  $productData = mysqli_fetch_assoc($productQuery);
-                  $product_name = $productData['nama_produk'];
-                ?>
-                  <tr>
-                    <td><?php echo $no++ ?></td>
-                    <td><?php echo $row['created_at'] ?></td>
-                    <td><?php echo $product_name ?></td>
-                    <td><?php echo $row['jumlah'] ?></td>
-                    <td><?php echo $row['deskripsi'] ?></td>
-                  </tr>
-                <?php
-                }
-                ?>
-            </table>
+            <?php
+            // Include the database configuration file
+            include 'proccess/config.php';
+
+            // Fetch the data from the database
+            $query = "SELECT pengajuan.*, product.nama_produk 
+          FROM pengajuan 
+          JOIN product ON pengajuan.id_produk = product.product_id 
+          ORDER BY pengajuan.created_at";
+            $result = mysqli_query($Connection, $query);
+
+            // Initialize an associative array to hold grouped data
+            $groupedData = [];
+
+            // Group the data by date and time
+            while ($row = mysqli_fetch_assoc($result)) {
+              $date = date('Y-m-d H:i:s', strtotime($row['created_at']));
+              if (!isset($groupedData[$date])) {
+                $groupedData[$date] = [];
+              }
+              $groupedData[$date][] = $row;
+            }
+
+            // Close the database connection
+            mysqli_close($Connection);
+            ?>
+
+            <div class="pengajuan-container">
+              <?php foreach ($groupedData as $date => $rows) { ?>
+                <h3>Pengajuan tanggal: <?php echo $date; ?></h3>
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Nama Barang</th>
+                      <th>Jumlah</th>
+                      <th>Ket Penawaran</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $rowCount = count($rows);
+                    foreach ($rows as $index => $row) { ?>
+                      <tr>
+                        <td><?php echo $row['nama_produk']; ?></td>
+                        <td><?php echo $row['jumlah']; ?></td>
+                        <td><?php echo $row['deskripsi']; ?></td>
+                        <?php if ($index === 0) { ?>
+                          <td rowspan="<?php echo $rowCount; ?>">
+                            <?php echo $row['status']; ?>
+                          </td>
+                        <?php } ?>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              <?php } ?>
+            </div>
+
           </div>
         </div>
       </div>
@@ -169,13 +189,13 @@ $result = mysqli_query($Connection, $sql1);
             <span class="sitename">General Steel Indonesia</span>
           </a>
           <div class="footer-contact pt-3">
-              <p>Jl. Utan Kayu Raya No.87</p>
-              <p>indonesia, 13120</p>
-              <p class="mt-3">
-                <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
-              </p>
-              <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
-            </div>
+            <p>Jl. Utan Kayu Raya No.87</p>
+            <p>indonesia, 13120</p>
+            <p class="mt-3">
+              <strong>Phone &nbsp;:</strong> <span><a href="https://wa.me/6281294443660">+62 812-9444-3660</a></span>
+            </p>
+            <p><strong>Email &nbsp;&nbsp; :</strong> <span><a href="mailto:general.stellindonesia@gmail.com">general.stellindonesia@gmail.com</a></span></p>
+          </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>

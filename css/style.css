@@ -8190,7 +8190,7 @@ h1, h2, h3, h4, h5,
   .login-wrap h3 {
     font-weight: 700;
     font-size: 20px;
-    color: #8d448b; }
+    color: var(--yellow); }
   .login-wrap .icon {
     width: 80px;
     height: 80px;
@@ -8305,11 +8305,11 @@ h1, h2, h3, h4, h5,
   .btn:hover, .btn:active, .btn:focus {
     outline: none; }
   .btn.btn-primary {
-    background: #8d448b !important;
-    border: 1px solid #8d448b !important;
+    background: var(--yellow) !important;
+    border: 1px solid var(--yellow) !important;
     color: #fff !important; }
     .btn.btn-primary:hover {
-      border: 1px solid #8d448b;
+      border: 1px solid var(--yellow);
       background: transparent;
       color: #8d448b; }
     .btn.btn-primary.btn-outline-primary {

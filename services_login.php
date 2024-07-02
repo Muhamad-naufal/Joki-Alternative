@@ -2,7 +2,9 @@
 session_start();
 include 'proccess/config.php';
 
-if (isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])) {
+  header("location:login/login.php");
+} else {
   $sql1 = mysqli_query($Connection, "SELECT * FROM `user` WHERE `user_id` = $_SESSION[user_id]");
   $data1 = mysqli_fetch_array($sql1);
 }

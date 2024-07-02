@@ -21,9 +21,9 @@ if (mysqli_num_rows($result) > 0) {
         // Menampilkan bintang penuh dan kosong sesuai dengan nilai bintang
         for ($i = 1; $i <= 5; $i++) {
             if ($i <= $bintang) {
-                echo '<i class="bi bi-star-fill text-warning"></i>'; // Bintang penuh
+                echo '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>'; // Bintang penuh
             } else {
-                echo '<i class="bi bi-star text-warning"></i>'; // Bintang kosong
+                echo '<i class="fa-regular fa-star" style="color: #FFD43B;"></i>'; // Bintang kosong
             }
         }
 

@@ -343,87 +343,6 @@ if (isset($_SESSION['user_id'])) {
     </section>
     <!-- /Alt Services 2 Section -->
 
-    <!-- Team Section -->
-    <section id="team" class="team section">
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Team</h2>
-        <p>
-          Kami Memiliki Team yang sudah berpengalaman dalam bidangnya masing -
-          masing
-        </p>
-      </div>
-      <!-- End Section Title -->
-
-      <div class="container">
-        <div class="row gy-5">
-          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="100">
-            <div class="member-img">
-              <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="" />
-              <div class="social">
-                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info text-center">
-              <h4>Roy Jal</h4>
-              <span>Komisaris Utama</span>
-              <p>
-                Aliquam iure quaerat voluptatem praesentium possimus unde
-                laudantium vel dolorum distinctio dire flow
-              </p>
-            </div>
-          </div>
-          <!-- End Team Member -->
-
-          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="200">
-            <div class="member-img">
-              <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="" />
-              <div class="social">
-                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info text-center">
-              <h4>Lukman Fahlevi S</h4>
-              <span>Direktur Utama</span>
-              <p>
-                Labore ipsam sit consequatur exercitationem rerum laboriosam
-                laudantium aut quod dolores exercitationem ut
-              </p>
-            </div>
-          </div>
-          <!-- End Team Member -->
-
-          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="300">
-            <div class="member-img">
-              <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="" />
-              <div class="social">
-                <a href="#"><i class="bi bi-twitter-x"></i></a>
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-            <div class="member-info text-center">
-              <h4>Aproyani Windarsih</h4>
-              <span>Direktur Operasional</span>
-              <p>
-                Illum minima ea autem doloremque ipsum quidem quas aspernatur
-                modi ut praesentium vel tque sed facilis at qui
-              </p>
-            </div>
-          </div>
-          <!-- End Team Member -->
-        </div>
-      </div>
-    </section>
-    <!-- /Team Section -->
-
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section">
       <!-- Section Title -->
@@ -522,7 +441,7 @@ if (isset($_SESSION['user_id'])) {
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
                       <span><?php echo $data['isi_komen'] ?></span>
-                      <i class="bi bi-quote quote-icon-right"></i>
+                      <i class="bi bi-quote quote-icwwon-right"></i>
                     </p>
                   </div>
                 </div>

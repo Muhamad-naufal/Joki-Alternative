@@ -68,8 +68,8 @@
 							</div>
 							<div class="form-group">
 								<input name="email" id="username" type="text" class="form-control rounded-left" placeholder="Username" required>
-								<div id="username-error" style="color: red;"></div>
-								<div id="username-success" style="color: green;"></div>
+								<div id="username-error" style="color: red; font-size: 10px;"></div>
+								<div id="username-success" style="color: green; font-size: 10px;"></div>
 							</div>
 							<div class="form-group">
 								<input name="email_user" id="email_user" type="text" class="form-control rounded-left" placeholder="Nama Lengkap" required>
@@ -79,15 +79,14 @@
 							</div>
 							<div class="form-group d-flex">
 								<input name="password" id="password" type="password" class="form-control rounded-left" placeholder="Password" required>
-
 							</div>
-							<div id="password-error" style="color: red;"></div>
-							<div id="password-success" style="color: green;"></div>
+							<div id="password-error" style="color: red; font-size: 10px; margin-top:-10px; margin-bottom:25px"></div>
+							<div id="password-success" style="color: green; font-size: 10px; font-size: 10px; margin-top:-10px; margin-bottom:25px"></div>
 							<div class="form-group d-flex">
 								<input name="confirm" id="confirm_password" type="password" class="form-control rounded-left" placeholder="Confirm Password" required>
 							</div>
-							<div id="confirm-password-error" style="color: red;"></div>
-							<div id="confirm-password-success" style="color: green;"></div>
+							<div id="confirm-password-error" style="color: red; font-size: 10px; margin-top:-10px; margin-bottom:25px"></div>
+							<div id="confirm-password-success" style="color: green; font-size: 10px; margin-top:-10px; margin-bottom:25px"></div>
 							<a href="login/login.php">
 								<h3 class="text-center mb-4">Already have account?</h3>
 							</a>
@@ -146,16 +145,11 @@
 				var allFieldsFilled = username && $('#email_user').val() && $('#no_telp').val() && password && confirmPassword;
 				var noErrors = !$('#username-error').text() && !$('#password-error').text() && !$('#confirm-password-error').text();
 
-				if (usernameValid) {
+				if (usernameValid && $('#username-success').text() === 'Username is available.') {
 					$('#username-success').text('Username is available.');
 					$('#username-error').text('');
 				} else {
 					$('#username-success').text('');
-					if (username.length > 0) {
-						$('#username-error').text('Username must contain lowercase letters, numbers, a special character, and no spaces.');
-					} else {
-						$('#username-error').text('');
-					}
 				}
 
 				if (passwordValid) {
@@ -203,9 +197,11 @@
 						success: function(response) {
 							if (response == 'taken') {
 								$('#username-error').text('Username is already taken. Please choose another one.');
+								$('#username-success').text('');
 							} else if (response == 'invalid') {
 								$('#username-error').text('Username must contain lowercase letters, numbers, a special character, and no spaces.');
-							} else {
+								$('#username-success').text('');
+							} else if (response == 'available') {
 								$('#username-success').text('Username is available.');
 								$('#username-error').text('');
 							}
@@ -262,6 +258,7 @@
 			});
 		});
 	</script>
+
 </body>
 
 </html>
